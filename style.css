@@ -2,27 +2,21 @@
 
 :root {
   --bg: #070908;
-  --bg-soft: #0b0f0c;
   --panel: #111612;
   --panel-soft: #161d16;
-  --panel-deep: #0d120f;
-
   --line: #394438;
-  --line-soft: rgba(168, 188, 105, 0.18);
 
   --olive: #a8bc69;
   --olive-soft: rgba(168, 188, 105, 0.12);
 
   --cyan: #72dadd;
-  --cyan-soft: rgba(114, 218, 221, 0.16);
+  --cyan-soft: rgba(114, 218, 221, 0.15);
 
   --text: #e4e7dc;
   --muted: #929a90;
 
   --red: #df5f5b;
   --amber: #efb558;
-
-  --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
 }
 
 * {
@@ -44,11 +38,6 @@ body {
       rgba(49, 71, 40, 0.72) 0%,
       transparent 35%
     ),
-    radial-gradient(
-      ellipse at 20% 100%,
-      rgba(114, 218, 221, 0.06) 0%,
-      transparent 34%
-    ),
     var(--bg);
   color: var(--text);
   font-family: "Share Tech Mono", monospace;
@@ -67,20 +56,11 @@ button {
   color: var(--text);
   cursor: pointer;
   letter-spacing: 0.04em;
-  transition:
-    border-color 0.18s ease,
-    color 0.18s ease,
-    background 0.18s ease,
-    transform 0.18s ease;
 }
 
 button:hover {
   border-color: var(--cyan);
   color: var(--cyan);
-}
-
-button:active {
-  transform: translateY(1px);
 }
 
 button:focus-visible,
@@ -129,8 +109,6 @@ select:focus-visible {
   color: #15200f;
   font-family: "Bebas Neue", sans-serif;
   font-size: 33px;
-  letter-spacing: 0.05em;
-  box-shadow: 0 0 18px rgba(168, 188, 105, 0.22);
 }
 
 .brand-copy p,
@@ -185,7 +163,6 @@ h2 span {
   border-radius: 50%;
   background: var(--cyan);
   box-shadow: 0 0 12px var(--cyan);
-  animation: pulse 1.8s infinite ease-in-out;
 }
 
 .system-status small {
@@ -195,15 +172,8 @@ h2 span {
 
 .panel {
   border: 1px solid var(--line);
-  background:
-    linear-gradient(
-      145deg,
-      rgba(22, 29, 22, 0.98),
-      rgba(17, 22, 18, 0.98)
-    );
-  box-shadow:
-    inset 0 1px rgba(255, 255, 255, 0.05),
-    var(--shadow);
+  background: linear-gradient(145deg, var(--panel-soft), var(--panel));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .screen {
@@ -275,7 +245,6 @@ h2 span {
 }
 
 .button-primary:hover {
-  border-color: var(--cyan);
   background: #20575a;
   color: #caffff;
 }
@@ -417,12 +386,7 @@ h2 span {
   min-height: 290px;
   overflow: hidden;
   border: 1px solid var(--line);
-  background:
-    linear-gradient(
-      130deg,
-      #202c1f,
-      #101510
-    );
+  background: linear-gradient(130deg, #202c1f, #101510);
 }
 
 .runway {
@@ -445,6 +409,8 @@ h2 span {
 
 .phone-marker {
   position: absolute;
+  bottom: 20px;
+  left: 48%;
   display: grid;
   width: 44px;
   height: 66px;
@@ -462,11 +428,6 @@ h2 span {
   height: 2px;
   background: var(--cyan);
   content: "";
-}
-
-.position-a {
-  bottom: 20px;
-  left: 48%;
 }
 
 .camera-direction {
@@ -556,14 +517,9 @@ h2 span {
   display: grid;
   height: 170px;
   margin: 9px 0;
-  overflow: hidden;
   place-items: center;
-  background:
-    linear-gradient(
-      135deg,
-      #1f2b21,
-      #080b09
-    );
+  overflow: hidden;
+  background: linear-gradient(135deg, #1f2b21, #080b09);
 }
 
 .camera-view::before,
@@ -829,11 +785,10 @@ h2 span {
   height: 140px;
   place-items: center;
   border-radius: 50%;
-  background:
-    conic-gradient(
-      var(--cyan) 0deg 310deg,
-      #2a342c 310deg 360deg
-    );
+  background: conic-gradient(
+    var(--cyan) 0deg 310deg,
+    #2a342c 310deg 360deg
+  );
   text-align: center;
 }
 
@@ -877,8 +832,8 @@ h2 span {
 
 .result-actions {
   display: grid;
-  gap: 14px;
   align-content: start;
+  gap: 14px;
 }
 
 .result-tip {
@@ -947,19 +902,6 @@ h2 span {
   border: 0;
   background: transparent;
   font-size: 26px;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(0.88);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 @media (max-width: 760px) {
