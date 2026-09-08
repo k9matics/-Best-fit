@@ -1,291 +1,328 @@
 "use strict";
 
-const get = (id) => document.getElementById(id);
+const byId = (id) => document.getElementById(id);
+
+const setupSteps = [
+  {
+    title: "Handy A seitlich aufstellen",
+    description:
+      "Stell das Handy ungefähr auf Höhe von Schulter und Ellbogen. Der Hund läuft später gerade an der Kamera vorbei.",
+    letter: "A",
+    direction: "SEITLICH",
+    position: {
+      left: "48%",
+      right: "auto",
+      top: "auto",
+      bottom: "20px"
+    }
+  },
+  {
+    title: "Handy B schräg vorne aufstellen",
+    description:
+      "Stell das Handy vorne links neben die Laufstrecke. Diese Ansicht hilft bei Brust, Vorderhand und Symmetrie.",
+    letter: "B",
+    direction: "VORNE LINKS",
+    position: {
+      left: "11%",
+      right: "auto",
+      top: "25%",
+      bottom: "auto"
+    }
+  },
+  {
+    title: "Handy C schräg hinten aufstellen",
+    description:
+      "Stell das Handy hinter der Laufstrecke auf. Diese Ansicht hilft bei Hinterhand, Becken und seitlichem Ausweichen.",
+    letter: "C",
+    direction: "HINTEN RECHTS",
+    position: {
+      left: "auto",
+      right: "10%",
+      top: "25%",
+      bottom: "auto"
+    }
+  }
+];
+
+let setupIndex = 0;
+let recordingPhase = 0;
 
 function showScreen(screenId) {
   document.querySelectorAll(".screen").forEach((screen) => {
     screen.classList.remove("is-active");
   });
 
-  const target = get(screenId);
+  const screen = byId(screenId);
 
-  if (target) {
-    target.classList.add("is-active");
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+  if (screen) {
+    screen.classList.add("is-active");
   }
-}
 
-function updateTime() {
-  const time = get("liveTime");
-
-  if (time) {
-    time.textContent = new Date().toLocaleTimeString("de-DE");
-  }
-}
-
-function bindScreenButtons() {
-  document.querySelectorAll("[data-screen-target]").forEach((button) => {
-    button.addEventListener("click", () => {
-      showScreen(button.dataset.screenTarget);
-    });
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
 }
 
-function bindProfileButton() {
-  const button = get("profileContinue");
+function updateClock() {
+  const liveTime = byId("liveTime");
 
-  if (!button) {
-    return;
+  if (liveTime) {
+    liveTime.textContent = new Date().toLocaleTimeString("de-DE");
   }
-
-  button.addEventListener("click", () => {
-    const dogName = get("dogName");
-
-    if (!dogName || !dogName.value.trim()) {
-      window.alert("Bitte gib zuerst den Namen deines Hundes ein.");
-
-      if (dogName) {
-        dogName.focus();
-      }
-
-      return;
-    }
-
-    showScreen("screenSetup");
-  });
 }
 
-function bindSetupButton() {
-  const button = get("setupContinue");
+function renderSetup() {
+  const step = setupSteps[setupIndex];
 
-  if (!button) {
-    return;
+  const title = byId("setupTitle");
+  const description = byId("setupDescription");
+  const marker = byId("phoneMarker");
+  const direction = byId("cameraDirection");
+  const continueButton = byId("setupContinue");
+
+  title.textContent = step.title;
+  description.textContent = step.description;
+  marker.textContent = step.letter;
+  direction.textContent = step.direction;
+
+  marker.style.left = step.position.left;
+  marker.style.right = step.position.right;
+  marker.style.top = step.position.top;
+  marker.style.bottom = step.position.bottom;
+
+  if (setupIndex === setupSteps.length - 1) {
+    continueButton.textContent = "KAMERAS SIND BEREIT →";
+  } else {
+    continueButton.textContent = "POSITION STIMMT →";
   }
-
-  let step = 0;
-
-  const steps = [
-    {
-      title: "Handy A seitlich aufstellen",
-      description:
-        "Stell das Handy ungefähr auf Höhe von Schulter und Ellbogen. Der Hund läuft später gerade an der Kamera vorbei.",
-      letter: "A",
-      direction: "SEITLICH",
-      style: ""
-    },
-    {
-      title: "Handy B schräg vorne aufstellen",
-      description:
-        "Stell das Handy vorne links neben die Laufstrecke. Diese Ansicht hilft bei Brust, Vorderhand und Symmetrie.",
-      letter: "B",
-      direction: "VORNE LINKS",
-      style: "left: 11%; top: 25%; bottom: auto;"
-    },
-    {
-      title: "Handy C schräg hinten aufstellen",
-      description:
-        "Stell das Handy hinter der Laufstrecke auf. Diese Ansicht hilft bei Hinterhand, Becken und seitlichem Ausweichen.",
-      letter: "C",
-      direction: "HINTEN RECHTS",
-      style: "right: 10%; top: 25%; left: auto; bottom: auto;"
-    }
-  ];
-
-  function renderStep() {
-    const current = steps[step];
-
-    get("setupTitle").textContent = current.title;
-    get("setupDescription").textContent = current.description;
-    get("phoneMarker").textContent = current.letter;
-    get("cameraDirection").textContent = current.direction;
-
-    get("phoneMarker").style.cssText = current.style;
-  }
-
-  button.addEventListener("click", () => {
-    if (step < steps.length - 1) {
-      step += 1;
-      renderStep();
-      return;
-    }
-
-    showScreen("screenRecord");
-  });
-
-  renderStep();
 }
 
-function bindRecordButton() {
-  const button = get("recordButton");
-  const continueButton = get("recordContinue");
-
-  if (!button || !continueButton) {
-    return;
-  }
-
-  let phase = 0;
-
-  const cameraIds = [
+function setCameraStatus(text) {
+  [
     "cameraAStatus",
     "cameraBStatus",
     "cameraCStatus"
-  ];
+  ].forEach((id) => {
+    const element = byId(id);
 
-  function setCameras(text) {
-    cameraIds.forEach((id) => {
-      const camera = get(id);
-
-      if (camera) {
-        camera.textContent = text;
-      }
-    });
-  }
-
-  button.addEventListener("click", () => {
-    const recordTitle = get("recordTitle");
-    const recordDescription = get("recordDescription");
-    const qualityText = get("qualityText");
-
-    if (phase === 0) {
-      phase = 1;
-
-      recordTitle.textContent = "Jetzt zwei kurze, gerade Läufe";
-
-      recordDescription.textContent =
-        "Lass den Hund erst ruhig gehen und dann traben. Wenn er stehen bleibt oder zieht, ist das kein Fehler: Wiederhole einfach den Lauf.";
-
-      qualityText.textContent =
-        "Startsignal erkannt · Kameras können synchronisiert werden";
-
-      button.textContent = "● WALK & TRAB AUFNAHME STARTEN";
-
-      setCameras("BEREIT");
-      return;
-    }
-
-    if (phase === 1) {
-      phase = 2;
-
-      recordTitle.textContent = "Aufnahme läuft";
-
-      recordDescription.textContent =
-        "Führe den Hund locker und gerade über die Strecke. Ziel: mindestens zwei kurze, gleichmäßige Durchgänge.";
-
-      qualityText.textContent =
-        "Aufnahme läuft · Hund bitte geradeaus führen";
-
-      button.textContent = "■ AUFNAHME BEENDEN";
-
-      setCameras("REC");
-      return;
-    }
-
-    phase = 3;
-
-    recordTitle.textContent = "Aufnahme ausreichend";
-
-    recordDescription.textContent =
-      "Die Aufnahme ist für den Best-Fit-Prototypen ausreichend. Du kannst jetzt die Auswertung öffnen.";
-
-    qualityText.textContent =
-      "Gut genug · 3 Kameras · verwertbare Laufsequenz erkannt";
-
-    setCameras("OK");
-
-    button.classList.add("is-hidden");
-    continueButton.classList.remove("is-hidden");
-  });
-
-  continueButton.addEventListener("click", () => {
-    const dogName = get("dogName");
-    const resultName = get("resultDogName");
-
-    if (dogName && resultName) {
-      resultName.textContent =
-        dogName.value.trim().toUpperCase() || "DEIN HUND";
-    }
-
-    showScreen("screenResult");
-  });
-}
-
-function bindHelp() {
-  const modal = get("helpModal");
-  const helpButton = get("helpButton");
-  const closeButton = get("closeHelpButton");
-  const understoodButton = get("helpUnderstoodButton");
-
-  if (!modal) {
-    return;
-  }
-
-  function closeModal() {
-    modal.classList.add("is-hidden");
-  }
-
-  if (helpButton) {
-    helpButton.addEventListener("click", () => {
-      modal.classList.remove("is-hidden");
-    });
-  }
-
-  if (closeButton) {
-    closeButton.addEventListener("click", closeModal);
-  }
-
-  if (understoodButton) {
-    understoodButton.addEventListener("click", closeModal);
-  }
-
-  modal.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      closeModal();
+    if (element) {
+      element.textContent = text;
     }
   });
 }
 
-function bindRetest() {
-  const retestButton = get("retestButton");
+function resetRecordScreen() {
+  recordingPhase = 0;
 
-  if (!retestButton) {
+  byId("recordTitle").textContent =
+    "Erst ein kurzes Startsignal";
+
+  byId("recordDescription").textContent =
+    "Starte alle drei Handys. Stelle dich kurz vor den Hund und klatsche einmal sichtbar.";
+
+  byId("qualityText").textContent =
+    "Bereit für die Aufnahme";
+
+  byId("recordButton").textContent =
+    "● STARTSIGNAL BESTÄTIGEN";
+
+  byId("recordButton").classList.remove("is-hidden");
+  byId("recordContinue").classList.add("is-hidden");
+
+  setCameraStatus("WARTET");
+}
+
+function updateRecordStep() {
+  const title = byId("recordTitle");
+  const description = byId("recordDescription");
+  const quality = byId("qualityText");
+  const button = byId("recordButton");
+  const continueButton = byId("recordContinue");
+
+  if (recordingPhase === 0) {
+    recordingPhase = 1;
+
+    title.textContent =
+      "Jetzt zwei kurze, gerade Läufe";
+
+    description.textContent =
+      "Lass den Hund erst ruhig gehen und dann traben. Wenn er stehen bleibt oder zieht, wiederhole den Lauf einfach.";
+
+    quality.textContent =
+      "Startsignal erkannt · Kameras können synchronisiert werden";
+
+    button.textContent =
+      "● WALK & TRAB AUFNAHME STARTEN";
+
+    setCameraStatus("BEREIT");
     return;
   }
 
-  retestButton.addEventListener("click", () => {
-    const button = get("recordButton");
-    const continueButton = get("recordContinue");
+  if (recordingPhase === 1) {
+    recordingPhase = 2;
 
-    get("recordTitle").textContent =
-      "Nur den Trab noch einmal aufnehmen";
+    title.textContent =
+      "Aufnahme läuft";
 
-    get("recordDescription").textContent =
-      "Der Bauchgurt wurde angepasst. Mache jetzt nur zwei kurze Trab-Läufe auf derselben Strecke.";
+    description.textContent =
+      "Führe den Hund locker und gerade über die Strecke. Ziel sind zwei kurze, gleichmäßige Durchgänge.";
 
-    get("qualityText").textContent =
-      "Wiederholung vorbereitet · nur Trab aufnehmen";
+    quality.textContent =
+      "Aufnahme läuft · Hund bitte geradeaus führen";
 
-    button.textContent = "● TRAB-AUFNAHME STARTEN";
+    button.textContent =
+      "■ AUFNAHME BEENDEN";
 
-    button.classList.remove("is-hidden");
-    continueButton.classList.add("is-hidden");
+    setCameraStatus("REC");
+    return;
+  }
 
+  recordingPhase = 3;
+
+  title.textContent =
+    "Aufnahme ausreichend";
+
+  description.textContent =
+    "Die Testaufnahme ist ausreichend. Du kannst jetzt die Best-Fit-Auswertung öffnen.";
+
+  quality.textContent =
+    "Gut genug · 3 Kameras · verwertbare Laufsequenz erkannt";
+
+  setCameraStatus("OK");
+
+  button.classList.add("is-hidden");
+  continueButton.classList.remove("is-hidden");
+}
+
+function openResult() {
+  const dogName = byId("dogName").value.trim();
+  const resultDogName = byId("resultDogName");
+
+  resultDogName.textContent = dogName
+    ? dogName.toUpperCase()
+    : "DEIN HUND";
+
+  showScreen("screenResult");
+}
+
+function openHelp() {
+  byId("helpModal").classList.remove("is-hidden");
+}
+
+function closeHelp() {
+  byId("helpModal").classList.add("is-hidden");
+}
+
+function startRetest() {
+  recordingPhase = 1;
+
+  byId("recordTitle").textContent =
+    "Nur den Trab noch einmal aufnehmen";
+
+  byId("recordDescription").textContent =
+    "Der Bauchgurt wurde angepasst. Mache jetzt zwei kurze Trab-Läufe auf derselben Strecke.";
+
+  byId("qualityText").textContent =
+    "Wiederholung vorbereitet · nur Trab aufnehmen";
+
+  byId("recordButton").textContent =
+    "● TRAB-AUFNAHME STARTEN";
+
+  byId("recordButton").classList.remove("is-hidden");
+  byId("recordContinue").classList.add("is-hidden");
+
+  setCameraStatus("BEREIT");
+
+  showScreen("screenRecord");
+}
+
+function bindEvents() {
+  byId("startTestButton").addEventListener("click", () => {
+    showScreen("screenProfile");
+  });
+
+  byId("profileBackButton").addEventListener("click", () => {
+    showScreen("screenWelcome");
+  });
+
+  byId("profileContinue").addEventListener("click", () => {
+    const dogName = byId("dogName").value.trim();
+
+    if (!dogName) {
+      window.alert("Bitte gib zuerst den Namen deines Hundes ein.");
+      byId("dogName").focus();
+      return;
+    }
+
+    setupIndex = 0;
+    renderSetup();
+    showScreen("screenSetup");
+  });
+
+  byId("setupBackButton").addEventListener("click", () => {
+    showScreen("screenProfile");
+  });
+
+  byId("setupContinue").addEventListener("click", () => {
+    if (setupIndex < setupSteps.length - 1) {
+      setupIndex += 1;
+      renderSetup();
+      return;
+    }
+
+    resetRecordScreen();
     showScreen("screenRecord");
+  });
+
+  byId("recordBackButton").addEventListener("click", () => {
+    showScreen("screenSetup");
+  });
+
+  byId("recordButton").addEventListener("click", () => {
+    updateRecordStep();
+  });
+
+  byId("recordContinue").addEventListener("click", () => {
+    openResult();
+  });
+
+  byId("helpButton").addEventListener("click", () => {
+    openHelp();
+  });
+
+  byId("closeHelpButton").addEventListener("click", () => {
+    closeHelp();
+  });
+
+  byId("helpUnderstoodButton").addEventListener("click", () => {
+    closeHelp();
+  });
+
+  byId("helpModal").addEventListener("click", (event) => {
+    if (event.target === byId("helpModal")) {
+      closeHelp();
+    }
+  });
+
+  byId("retestButton").addEventListener("click", () => {
+    startRetest();
+  });
+
+  byId("newTestButton").addEventListener("click", () => {
+    byId("dogName").value = "";
+    byId("harnessName").value = "";
+    showScreen("screenWelcome");
   });
 }
 
 function init() {
-  bindScreenButtons();
-  bindProfileButton();
-  bindSetupButton();
-  bindRecordButton();
-  bindHelp();
-  bindRetest();
+  renderSetup();
+  resetRecordScreen();
+  updateClock();
+  bindEvents();
 
-  updateTime();
-  window.setInterval(updateTime, 1000);
+  window.setInterval(updateClock, 1000);
 }
 
 document.addEventListener("DOMContentLoaded", init);
