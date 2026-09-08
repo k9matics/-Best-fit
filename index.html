@@ -49,4 +49,461 @@
 
         <p class="lead">
           Du brauchst keine Fachkenntnisse. BEST FIT zeigt dir immer
-          nur den nächsten sicheren
+          nur den nächsten sicheren Schritt.
+        </p>
+
+        <div class="safety-note">
+          <strong>✓</strong>
+
+          <span>
+            Passformhilfe für Geschirre. Keine tierärztliche Diagnose.
+          </span>
+        </div>
+
+        <button
+          id="startTestButton"
+          class="button button-primary button-large"
+          type="button"
+        >
+          NEUEN BEST-FIT-TEST STARTEN →
+        </button>
+      </article>
+
+      <section class="feature-grid">
+        <article class="feature-card">
+          <b>01</b>
+          <strong>Hund eintragen</strong>
+          <span>Nur Name und Geschirr</span>
+        </article>
+
+        <article class="feature-card">
+          <b>02</b>
+          <strong>Handys aufstellen</strong>
+          <span>Wir erklären jeden Platz</span>
+        </article>
+
+        <article class="feature-card">
+          <b>03</b>
+          <strong>Walk & Trab filmen</strong>
+          <span>Mit Qualitätsprüfung</span>
+        </article>
+
+        <article class="feature-card">
+          <b>04</b>
+          <strong>Best Fit sehen</strong>
+          <span>Mit klarer Gurt-Anweisung</span>
+        </article>
+      </section>
+    </section>
+
+    <section id="screenProfile" class="screen">
+      <article class="wizard panel">
+        <div class="progress">
+          <span class="is-done">1</span>
+          <i></i>
+          <span>2</span>
+          <i></i>
+          <span>3</span>
+          <i></i>
+          <span>4</span>
+        </div>
+
+        <p class="eyebrow">SCHRITT 1 VON 4 · DEIN TEST</p>
+
+        <h2>Wen prüfen wir?</h2>
+
+        <p class="hint">
+          Für den Anfang reichen diese Angaben.
+          Du kannst sie später ändern.
+        </p>
+
+        <label class="field">
+          <span>NAME DES HUNDES</span>
+
+          <input
+            id="dogName"
+            type="text"
+            placeholder="z. B. Ferox"
+            autocomplete="off"
+          >
+        </label>
+
+        <label class="field">
+          <span>GESCHIRR / VARIANTE</span>
+
+          <input
+            id="harnessName"
+            type="text"
+            placeholder="z. B. Sensor-Y Prototyp A"
+            autocomplete="off"
+          >
+        </label>
+
+        <label class="field">
+          <span>WAS MÖCHTEST DU PRÜFEN?</span>
+
+          <select id="testPurpose">
+            <option value="alltag">Alltag & lockere Leine</option>
+            <option value="zug">Leichter Zug / Training</option>
+            <option value="vergleich">Zwei Geschirre vergleichen</option>
+          </select>
+        </label>
+
+        <div class="wizard-nav">
+          <button
+            id="profileBackButton"
+            class="button button-ghost"
+            type="button"
+          >
+            ← ZURÜCK
+          </button>
+
+          <button
+            id="profileContinue"
+            class="button button-primary"
+            type="button"
+          >
+            WEITER →
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screenSetup" class="screen">
+      <article class="wizard wizard-wide panel">
+        <div class="progress">
+          <span class="is-done">1</span>
+          <i class="is-done"></i>
+          <span class="is-done">2</span>
+          <i></i>
+          <span>3</span>
+          <i></i>
+          <span>4</span>
+        </div>
+
+        <p class="eyebrow">SCHRITT 2 VON 4 · HANDYS AUFSTELLEN</p>
+
+        <h2 id="setupTitle">Handy A seitlich aufstellen</h2>
+
+        <p id="setupDescription" class="hint">
+          Stell das Handy ungefähr auf Höhe von Schulter und Ellbogen.
+          Der Hund läuft später gerade an der Kamera vorbei.
+        </p>
+
+        <div class="setup-layout">
+          <div class="setup-map">
+            <div class="runway"></div>
+            <div class="dog-icon">🐕</div>
+
+            <div id="phoneMarker" class="phone-marker">
+              A
+            </div>
+
+            <div id="cameraDirection" class="camera-direction">
+              SEITLICH
+            </div>
+          </div>
+
+          <div class="checklist">
+            <p>
+              <strong>✓</strong>
+              Kamera steht fest, idealerweise auf einem Stativ
+            </p>
+
+            <p>
+              <strong>✓</strong>
+              Der ganze Hund passt ins Bild: Kopf bis Pfoten
+            </p>
+
+            <p>
+              <strong>✓</strong>
+              Die Teststrecke ist eben und gut beleuchtet
+            </p>
+          </div>
+        </div>
+
+        <div class="wizard-nav">
+          <button
+            id="setupBackButton"
+            class="button button-ghost"
+            type="button"
+          >
+            ← ZURÜCK
+          </button>
+
+          <button
+            id="setupContinue"
+            class="button button-primary"
+            type="button"
+          >
+            POSITION STIMMT →
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screenRecord" class="screen">
+      <article class="wizard wizard-wide panel">
+        <div class="progress">
+          <span class="is-done">1</span>
+          <i class="is-done"></i>
+          <span class="is-done">2</span>
+          <i class="is-done"></i>
+          <span class="is-done">3</span>
+          <i></i>
+          <span>4</span>
+        </div>
+
+        <p class="eyebrow">SCHRITT 3 VON 4 · AUFNAHME</p>
+
+        <h2 id="recordTitle">Erst ein kurzes Startsignal</h2>
+
+        <p id="recordDescription" class="hint">
+          Starte alle drei Handys. Stelle dich kurz vor den Hund
+          und klatsche einmal sichtbar.
+        </p>
+
+        <div class="quality-bar">
+          <strong>QUALITÄTSCHECK</strong>
+          <span id="qualityText">Bereit für die Aufnahme</span>
+        </div>
+
+        <section class="camera-grid">
+          <article class="camera-card">
+            <header>
+              <strong>CAM A · SEITE</strong>
+              <small>PFLICHTKAMERA</small>
+            </header>
+
+            <div class="camera-view">
+              <span class="camera-cross"></span>
+              <em id="cameraAStatus">WARTET</em>
+            </div>
+
+            <p>Hauptansicht für Laufbild und Schulterfreiheit</p>
+          </article>
+
+          <article class="camera-card">
+            <header>
+              <strong>CAM B · VORNE</strong>
+              <small>SYMMETRIE</small>
+            </header>
+
+            <div class="camera-view">
+              <span class="camera-cross"></span>
+              <em id="cameraBStatus">WARTET</em>
+            </div>
+
+            <p>Brust, Vorderhand und Spurtreue</p>
+          </article>
+
+          <article class="camera-card">
+            <header>
+              <strong>CAM C · HINTEN</strong>
+              <small>HINTERHAND</small>
+            </header>
+
+            <div class="camera-view">
+              <span class="camera-cross"></span>
+              <em id="cameraCStatus">WARTET</em>
+            </div>
+
+            <p>Becken, Hinterhand und Seitversatz</p>
+          </article>
+        </section>
+
+        <div class="record-actions">
+          <button
+            id="helpButton"
+            class="button button-ghost"
+            type="button"
+          >
+            ? ICH WEISS NICHT WEITER
+          </button>
+
+          <button
+            id="recordButton"
+            class="button button-primary button-large"
+            type="button"
+          >
+            ● STARTSIGNAL BESTÄTIGEN
+          </button>
+        </div>
+
+        <div class="wizard-nav">
+          <button
+            id="recordBackButton"
+            class="button button-ghost"
+            type="button"
+          >
+            ← ZURÜCK
+          </button>
+
+          <button
+            id="recordContinue"
+            class="button button-primary is-hidden"
+            type="button"
+          >
+            AUFNAHME PRÜFEN →
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screenResult" class="screen">
+      <div class="result-layout">
+        <article class="panel result-main">
+          <p class="eyebrow">SCHRITT 4 VON 4 · DEIN ERGEBNIS</p>
+
+          <h2>
+            BEST FIT<br>
+            <span id="resultDogName">DEIN HUND</span>
+          </h2>
+
+          <div class="data-confidence">
+            <strong>DATENQUALITÄT: <span>HOCH</span></strong>
+
+            <small>
+              3 Kameraansichten · 2 verwertbare Laufsequenzen · IMU aktiv
+            </small>
+          </div>
+
+          <div class="dog-model-stage">
+            <div class="dog-model">
+              <div class="dog-body"></div>
+              <div class="dog-head"></div>
+
+              <div class="dog-leg leg-one"></div>
+              <div class="dog-leg leg-two"></div>
+              <div class="dog-leg leg-three"></div>
+              <div class="dog-leg leg-four"></div>
+
+              <div class="harness-part harness-neck"></div>
+              <div class="harness-part harness-chest"></div>
+              <div class="harness-part harness-belly"></div>
+
+              <span class="hotspot hotspot-one">1</span>
+              <span class="hotspot hotspot-two">2</span>
+            </div>
+
+            <div class="legend">
+              <span class="legend-good">● stabil</span>
+              <span class="legend-warn">● prüfen</span>
+              <span class="legend-bad">● Sperrzone</span>
+            </div>
+          </div>
+
+          <div class="score-layout">
+            <div class="total-score">
+              <strong>86</strong>
+              <span>BEST-FIT SCORE</span>
+            </div>
+
+            <div class="metric-bars">
+              <p>
+                STABILITÄT <b>90</b>
+                <i><em style="width: 90%"></em></i>
+              </p>
+
+              <p>
+                BEWEGUNGSFREIHEIT <b>83</b>
+                <i><em style="width: 83%"></em></i>
+              </p>
+
+              <p>
+                LAUFBILD <b>87</b>
+                <i><em style="width: 87%"></em></i>
+              </p>
+
+              <p>
+                SYMMETRIE <b>84</b>
+                <i><em style="width: 84%"></em></i>
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <aside class="panel result-actions">
+          <p class="eyebrow">JETZT AM GESCHIRR</p>
+
+          <h3>2 kleine Anpassungen</h3>
+
+          <article class="result-tip tip-good">
+            <strong>✓ 1 · RÜCKENPLATTE</strong>
+            <p>Bleibt im Trab zentriert. So lassen.</p>
+          </article>
+
+          <article class="result-tip tip-warn">
+            <strong>! 2 · BAUCHGURT</strong>
+
+            <p>
+              Etwa 8 mm weiter nach hinten stellen und den Trab
+              anschließend erneut prüfen.
+            </p>
+
+            <button
+              id="retestButton"
+              class="button button-warn"
+              type="button"
+            >
+              NUR TRAB ERNEUT TESTEN →
+            </button>
+          </article>
+
+          <article class="result-tip">
+            <strong>↗ NÄCHSTER SCHRITT</strong>
+
+            <p>
+              Später kannst du diese Einstellung direkt
+              mit Geschirr B vergleichen.
+            </p>
+          </article>
+
+          <button
+            id="newTestButton"
+            class="button button-primary"
+            type="button"
+          >
+            NEUEN TEST STARTEN
+          </button>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="helpModal" class="modal is-hidden">
+    <div class="modal-card panel">
+      <button
+        id="closeHelpButton"
+        class="modal-close"
+        type="button"
+        aria-label="Hilfe schließen"
+      >
+        ×
+      </button>
+
+      <p class="eyebrow">HILFE ZUM AKTUELLEN SCHRITT</p>
+
+      <h2>Kein Problem.</h2>
+
+      <p>
+        Prüfe nur diese drei Dinge: Die Handys stehen fest,
+        der ganze Hund ist sichtbar und er kann geradeaus laufen.
+        Wenn das passt, bestätigst du das Startsignal und machst
+        zwei kurze Läufe.
+      </p>
+
+      <button
+        id="helpUnderstoodButton"
+        class="button button-primary"
+        type="button"
+      >
+        VERSTANDEN
+      </button>
+    </div>
+  </div>
+
+  <script src="./app.js?v=1.0.1"></script>
+</body>
+</html>
