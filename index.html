@@ -11,81 +11,7 @@
 
   <title>HARNELYZER · BEST FIT</title>
 
-  <link rel="stylesheet" href="./style.css?v=1.0.2">
-
-  <style>
-    .camera-live {
-      position: relative;
-      min-height: 220px;
-      overflow: hidden;
-      border: 1px solid #394438;
-      background: #050705;
-    }
-
-    .camera-live video {
-      display: block;
-      width: 100%;
-      min-height: 220px;
-      object-fit: cover;
-      background: #050705;
-    }
-
-    .camera-live .camera-cross {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      z-index: 2;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    .camera-live-status {
-      position: absolute;
-      z-index: 3;
-      right: 8px;
-      bottom: 8px;
-      padding: 6px 8px;
-      background: rgba(0, 0, 0, 0.78);
-      color: #a8bc69;
-      font-size: 10px;
-    }
-
-    .camera-live-controls {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .camera-live-controls button {
-      min-height: 48px;
-      padding: 10px 8px;
-      font-size: 11px;
-    }
-
-    .camera-message {
-      min-height: 42px;
-      margin-top: 10px;
-      padding: 10px;
-      border-left: 3px solid #a8bc69;
-      background: rgba(168, 188, 105, 0.1);
-      color: #c6cbbb;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .camera-message.is-error {
-      border-left-color: #df5f5b;
-      background: rgba(223, 95, 91, 0.1);
-      color: #ffc4c0;
-    }
-
-    .camera-role {
-      margin: 0 0 10px;
-      color: #72dadd;
-      font-size: 12px;
-    }
-  </style>
+  <link rel="stylesheet" href="./style.css?v=1.1.1">
 </head>
 
 <body>
@@ -107,14 +33,14 @@
 
       <div class="system-status">
         <span class="status-dot"></span>
-        <span>LOKALE TESTSESSION</span>
+        <span id="sessionHeader">KEIN TEST AKTIV</span>
         <small id="liveTime">--:--:--</small>
       </div>
     </header>
 
     <section id="screenWelcome" class="screen is-active">
       <article class="hero panel">
-        <p class="eyebrow">WIR MACHEN DAS GEMEINSAM</p>
+        <p class="eyebrow">3 KAMERAS · EIN TEST</p>
 
         <h2>
           Finde die beste Einstellung<br>
@@ -122,13 +48,16 @@
         </h2>
 
         <p class="lead">
-          Du brauchst keine Fachkenntnisse. BEST FIT zeigt dir immer
-          nur den nächsten sicheren Schritt.
+          Erstelle den Test zuerst auf Handy A. Danach scannst du
+          den QR-Code mit Handy B und Handy C.
         </p>
 
         <div class="safety-note">
           <strong>✓</strong>
-          <span>Passformhilfe für Geschirre. Keine tierärztliche Diagnose.</span>
+
+          <span>
+            Passformhilfe für Geschirre. Keine tierärztliche Diagnose.
+          </span>
         </div>
 
         <button
@@ -136,33 +65,41 @@
           class="button button-primary button-large"
           type="button"
         >
-          NEUEN BEST-FIT-TEST STARTEN →
+          3-KAMERA-TEST ERSTELLEN →
+        </button>
+
+        <button
+          id="joinTestButton"
+          class="button button-ghost button-large"
+          type="button"
+        >
+          ICH TRETE EINEM TEST BEI →
         </button>
       </article>
 
       <section class="feature-grid">
         <article class="feature-card">
-          <b>01</b>
-          <strong>Hund eintragen</strong>
-          <span>Nur Name und Geschirr</span>
+          <b>A</b>
+          <strong>Seite</strong>
+          <span>Schulter, Rücken und Gurte</span>
         </article>
 
         <article class="feature-card">
-          <b>02</b>
-          <strong>Handys aufstellen</strong>
-          <span>Wir erklären jeden Platz</span>
+          <b>B</b>
+          <strong>Vorne</strong>
+          <span>Brust und Vorderhand</span>
         </article>
 
         <article class="feature-card">
-          <b>03</b>
-          <strong>Walk & Trab filmen</strong>
-          <span>Mit Qualitätsprüfung</span>
+          <b>C</b>
+          <strong>Hinten</strong>
+          <span>Becken und Hinterhand</span>
         </article>
 
         <article class="feature-card">
-          <b>04</b>
-          <strong>Best Fit sehen</strong>
-          <span>Mit klarer Gurt-Anweisung</span>
+          <b>✓</b>
+          <strong>Ein Test</strong>
+          <span>Gleiche Test-ID auf allen Geräten</span>
         </article>
       </section>
     </section>
@@ -179,15 +116,18 @@
           <span>4</span>
         </div>
 
-        <p class="eyebrow">SCHRITT 1 VON 4 · DEIN TEST</p>
+        <p class="eyebrow">SCHRITT 1 VON 4 · TEST ERSTELLEN</p>
+
         <h2>Wen prüfen wir?</h2>
 
         <p class="hint">
-          Für den Anfang reichen diese Angaben. Du kannst sie später ändern.
+          Gib den Namen deines Hundes ein. Dann erstellen wir eine
+          gemeinsame Test-ID für alle drei Handys.
         </p>
 
         <label class="field">
           <span>NAME DES HUNDES</span>
+
           <input
             id="dogName"
             type="text"
@@ -198,6 +138,7 @@
 
         <label class="field">
           <span>GESCHIRR / VARIANTE</span>
+
           <input
             id="harnessName"
             type="text"
@@ -206,28 +147,86 @@
           >
         </label>
 
-        <label class="field">
-          <span>WAS MÖCHTEST DU PRÜFEN?</span>
-          <select id="testPurpose">
-            <option value="alltag">Alltag & lockere Leine</option>
-            <option value="zug">Leichter Zug / Training</option>
-            <option value="vergleich">Zwei Geschirre vergleichen</option>
-          </select>
-        </label>
-
         <div class="wizard-nav">
-          <button id="profileBackButton" class="button button-ghost" type="button">
+          <button
+            id="profileBackButton"
+            class="button button-ghost"
+            type="button"
+          >
             ← ZURÜCK
           </button>
 
-          <button id="profileContinue" class="button button-primary" type="button">
-            WEITER →
+          <button
+            id="profileContinue"
+            class="button button-primary"
+            type="button"
+          >
+            TEST-ID ERZEUGEN →
           </button>
         </div>
       </article>
     </section>
 
-    <section id="screenSetup" class="screen">
+    <section id="screenJoin" class="screen">
+      <article class="wizard panel">
+        <p class="eyebrow">HANDY B ODER C · TEST BEITRETEN</p>
+
+        <h2 id="joinTitle">Test-ID eingeben</h2>
+
+        <p id="joinHint" class="hint">
+          Scanne den QR-Code von Handy A mit deiner normalen
+          Handy-Kamera. Öffne anschließend den angezeigten Link.
+        </p>
+
+        <div
+          id="joinedSessionCard"
+          class="session-card is-hidden"
+        >
+          <span>VERBUNDENE TEST-ID</span>
+          <strong id="joinedTestId">BF-000000</strong>
+        </div>
+
+        <label id="manualJoinField" class="field">
+          <span>ODER TEST-ID MANUELL EINGEBEN</span>
+
+          <input
+            id="manualTestId"
+            type="text"
+            placeholder="z. B. BF-7K2M9P"
+            autocomplete="off"
+          >
+        </label>
+
+        <label class="field">
+          <span>DIESES HANDY IST</span>
+
+          <select id="joinRole">
+            <option value="B">KAMERA B · VORNE LINKS</option>
+            <option value="C">KAMERA C · HINTEN RECHTS</option>
+          </select>
+        </label>
+
+        <div class="wizard-nav">
+          <button
+            id="joinBackButton"
+            class="button button-ghost"
+            type="button"
+          >
+            ← ZURÜCK
+          </button>
+
+          <button
+            id="joinContinue"
+            class="button button-primary"
+            type="button"
+          >
+            TEST BEITRETEN →
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screenInvite" class="screen">
       <article class="wizard wizard-wide panel">
         <div class="progress">
           <span class="is-done">1</span>
@@ -239,13 +238,89 @@
           <span>4</span>
         </div>
 
-        <p class="eyebrow">SCHRITT 2 VON 4 · HANDYS AUFSTELLEN</p>
+        <p class="eyebrow">SCHRITT 2 VON 4 · HANDYS BEITRETEN LASSEN</p>
 
-        <h2 id="setupTitle">Handy A seitlich aufstellen</h2>
+        <h2>Handy B und C verbinden</h2>
+
+        <p class="hint">
+          Scanne den QR-Code mit den anderen Handys. Falls das nicht
+          klappt, verschicke den Link per WhatsApp oder kopiere die Test-ID.
+        </p>
+
+        <div class="invite-layout">
+          <div class="qr-card">
+            <div id="qrCode" class="qr-code">
+              QR-CODE WIRD ERSTELLT ...
+            </div>
+
+            <strong>
+              TEST-ID:
+              <span id="inviteTestId">BF-000000</span>
+            </strong>
+          </div>
+
+          <div class="invite-info">
+            <article class="session-card">
+              <span>HANDY A</span>
+              <strong>KAMERA A · SEITLICH</strong>
+              <small>Dieses Handy bleibt bei dir.</small>
+            </article>
+
+            <article class="session-card">
+              <span>HANDY B</span>
+              <strong>KAMERA B · VORNE LINKS</strong>
+              <small>QR-Code scannen und Rolle B wählen.</small>
+            </article>
+
+            <article class="session-card">
+              <span>HANDY C</span>
+              <strong>KAMERA C · HINTEN RECHTS</strong>
+              <small>QR-Code scannen und Rolle C wählen.</small>
+            </article>
+
+            <button
+              id="copyJoinLinkButton"
+              class="button button-ghost"
+              type="button"
+            >
+              BEITRITTS-LINK KOPIEREN
+            </button>
+          </div>
+        </div>
+
+        <p id="copyStatus" class="camera-message">
+          Der QR-Code enthält die Test-ID. Kamera B und C treten damit
+          derselben Aufnahmegruppe bei.
+        </p>
+
+        <div class="wizard-nav">
+          <button
+            id="inviteBackButton"
+            class="button button-ghost"
+            type="button"
+          >
+            ← ZURÜCK
+          </button>
+
+          <button
+            id="inviteContinue"
+            class="button button-primary"
+            type="button"
+          >
+            MIT KAMERA A WEITER →
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section id="screenSetup" class="screen">
+      <article class="wizard wizard-wide panel">
+        <p class="eyebrow">SCHRITT 3 VON 4 · AUFSTELLUNG</p>
+
+        <h2 id="setupTitle">Kamera A seitlich aufstellen</h2>
 
         <p id="setupDescription" class="hint">
-          Stell das Handy ungefähr auf Höhe von Schulter und Ellbogen.
-          Der Hund läuft später gerade an der Kamera vorbei.
+          Stelle das Handy seitlich an der Laufstrecke auf.
         </p>
 
         <div class="setup-layout">
@@ -257,19 +332,28 @@
           </div>
 
           <div class="checklist">
-            <p><strong>✓</strong> Kamera steht fest, idealerweise auf einem Stativ</p>
-            <p><strong>✓</strong> Der ganze Hund passt ins Bild: Kopf bis Pfoten</p>
-            <p><strong>✓</strong> Die Teststrecke ist eben und gut beleuchtet</p>
+            <p><strong>✓</strong> Handy steht fest oder liegt sicher auf</p>
+            <p><strong>✓</strong> Der ganze Hund passt von Kopf bis Pfoten ins Bild</p>
+            <p><strong>✓</strong> Strecke ist gerade, eben und hell</p>
+            <p><strong>✓</strong> Vor allen Kameras einmal sichtbar klatschen</p>
           </div>
         </div>
 
         <div class="wizard-nav">
-          <button id="setupBackButton" class="button button-ghost" type="button">
+          <button
+            id="setupBackButton"
+            class="button button-ghost"
+            type="button"
+          >
             ← ZURÜCK
           </button>
 
-          <button id="setupContinue" class="button button-primary" type="button">
-            POSITION STIMMT →
+          <button
+            id="setupContinue"
+            class="button button-primary"
+            type="button"
+          >
+            KAMERA ÖFFNEN →
           </button>
         </div>
       </article>
@@ -277,101 +361,58 @@
 
     <section id="screenRecord" class="screen">
       <article class="wizard wizard-wide panel">
-        <div class="progress">
-          <span class="is-done">1</span>
-          <i class="is-done"></i>
-          <span class="is-done">2</span>
-          <i class="is-done"></i>
-          <span class="is-done">3</span>
-          <i></i>
-          <span>4</span>
-        </div>
+        <p class="eyebrow">SCHRITT 4 VON 4 · AUFNAHME</p>
 
-        <p class="eyebrow">SCHRITT 3 VON 4 · KAMERA & AUFNAHME</p>
+        <h2 id="recordTitle">Kamera A bereit machen</h2>
 
-        <h2 id="recordTitle">Kamera dieses Handys aktivieren</h2>
-
-        <p id="recordDescription" class="hint">
-          Dieses Handy übernimmt eine Kameraansicht. Öffne die Kamera,
-          prüfe den Bildausschnitt und starte erst dann die Aufnahme.
+        <p class="hint">
+          Kamera öffnen, Bildausschnitt prüfen und dann die Aufnahme
+          starten. Das Video bleibt zunächst auf diesem Handy.
         </p>
 
         <div class="quality-bar">
-          <strong>STATUS</strong>
-          <span id="qualityText">Kamera noch nicht aktiviert</span>
-        </div>
-
-        <div class="camera-live">
-          <video
-            id="cameraPreview"
-            autoplay
-            muted
-            playsinline
-          ></video>
-
-          <span class="camera-cross"></span>
-
-          <span id="cameraLiveStatus" class="camera-live-status">
-            KAMERA AUS
-          </span>
-        </div>
-
-        <p id="cameraMessage" class="camera-message">
-          Tippe auf „KAMERA AKTIVIEREN“. Erlaube Chrome anschließend
-          den Zugriff auf die Kamera.
-        </p>
-
-        <div class="camera-live-controls">
-          <button
-            id="cameraRearButton"
-            class="button button-primary"
-            type="button"
-          >
-            RÜCKKAMERA
-          </button>
-
-          <button
-            id="cameraFrontButton"
-            class="button"
-            type="button"
-          >
-            FRONTKAMERA
-          </button>
-
-          <button
-            id="cameraStopButton"
-            class="button button-ghost"
-            type="button"
-          >
-            STOPP
-          </button>
+          <strong>AKTUELLER TEST</strong>
+          <span id="recordTestId">BF-000000 · KAMERA A</span>
         </div>
 
         <div class="record-actions">
-          <button id="helpButton" class="button button-ghost" type="button">
-            ? ICH WEISS NICHT WEITER
-          </button>
-
           <button
-            id="recordButton"
+            id="openCameraButton"
             class="button button-primary button-large"
             type="button"
           >
-            KAMERA AKTIVIEREN
+            KAMERA A ÖFFNEN
+          </button>
+
+          <button
+            id="openResultButton"
+            class="button button-ghost"
+            type="button"
+          >
+            DEMO-ERGEBNIS ZEIGEN
           </button>
         </div>
 
+        <p id="recordStatus" class="camera-message">
+          Videos werden aktuell noch nicht zwischen Geräten übertragen.
+          Alle Handys tragen aber dieselbe Test-ID.
+        </p>
+
         <div class="wizard-nav">
-          <button id="recordBackButton" class="button button-ghost" type="button">
+          <button
+            id="recordBackButton"
+            class="button button-ghost"
+            type="button"
+          >
             ← ZURÜCK
           </button>
 
           <button
-            id="recordContinue"
-            class="button button-primary is-hidden"
+            id="finishTestButton"
+            class="button button-primary"
             type="button"
           >
-            DEMO-AUSWERTUNG ÖFFNEN →
+            TEST ABSCHLIESSEN →
           </button>
         </div>
       </article>
@@ -380,7 +421,7 @@
     <section id="screenResult" class="screen">
       <div class="result-layout">
         <article class="panel result-main">
-          <p class="eyebrow">SCHRITT 4 VON 4 · DEIN ERGEBNIS</p>
+          <p class="eyebrow">BEST FIT · PROTOTYPERGEBNIS</p>
 
           <h2>
             BEST FIT<br>
@@ -388,8 +429,8 @@
           </h2>
 
           <div class="data-confidence">
-            <strong>DATENQUALITÄT: <span>DEMO</span></strong>
-            <small>Diese Bewertung ist aktuell ein UI-Prototyp, keine echte Videoanalyse.</small>
+            <strong>TEST: <span id="resultTestId">BF-000000</span></strong>
+            <small>UI-Prototyp: Noch keine automatische Videoanalyse.</small>
           </div>
 
           <div class="dog-model-stage">
@@ -431,6 +472,7 @@
 
         <aside class="panel result-actions">
           <p class="eyebrow">JETZT AM GESCHIRR</p>
+
           <h3>2 kleine Anpassungen</h3>
 
           <article class="result-tip tip-good">
@@ -440,371 +482,28 @@
 
           <article class="result-tip tip-warn">
             <strong>! 2 · BAUCHGURT</strong>
-            <p>Etwa 8 mm weiter nach hinten stellen und den Trab anschließend erneut prüfen.</p>
+            <p>Etwa 8 mm weiter nach hinten stellen und Trab erneut prüfen.</p>
 
-            <button id="retestButton" class="button button-warn" type="button">
-              NUR TRAB ERNEUT TESTEN →
+            <button
+              id="retestButton"
+              class="button button-warn"
+              type="button"
+            >
+              TRAB ERNEUT TESTEN →
             </button>
           </article>
 
-          <button id="newTestButton" class="button button-primary" type="button">
+          <button
+            id="newTestButton"
+            class="button button-primary"
+            type="button"
+          >
             NEUEN TEST STARTEN
           </button>
         </aside>
       </div>
     </section>
 
-  </main>
-
-  <div id="helpModal" class="modal is-hidden">
-    <div class="modal-card panel">
-      <button
-        id="closeHelpButton"
-        class="modal-close"
-        type="button"
-        aria-label="Hilfe schließen"
-      >
-        ×
-      </button>
-
-      <p class="eyebrow">HILFE</p>
-      <h2>Kein Problem.</h2>
-
-      <p>
-        Tippe auf „KAMERA AKTIVIEREN“ und erlaube Chrome den Kamerazugriff.
-        Stelle das Handy danach fest auf und prüfe, ob der ganze Hund
-        von Kopf bis Pfoten zu sehen ist.
-      </p>
-
-      <button id="helpUnderstoodButton" class="button button-primary" type="button">
-        VERSTANDEN
-      </button>
-    </div>
-  </div>
-
-  <script src="./app.js?v=1.0.2"></script>
-</body>
-</html>
-<!doctype html>
-<html lang="de">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#070908">
-  <title>HARNELYZER · BEST FIT</title>
-
-  <link rel="stylesheet" href="./style.css?v=1.1.0">
-</head>
-
-<body>
-  <main class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">H</div>
-
-        <div class="brand-copy">
-          <p>HARNELYZER / BEST FIT ENGINE</p>
-          <h1>GESCHIRR<br><span>BEST FIT</span></h1>
-        </div>
-      </div>
-
-      <div class="system-status">
-        <span class="status-dot"></span>
-        <span id="sessionHeader">KEIN TEST AKTIV</span>
-        <small id="liveTime">--:--:--</small>
-      </div>
-    </header>
-
-    <section id="screenWelcome" class="screen is-active">
-      <article class="hero panel">
-        <p class="eyebrow">3 KAMERAS · EIN TEST</p>
-
-        <h2>Finde die beste Einstellung<br>für <span>deinen Hund.</span></h2>
-
-        <p class="lead">
-          Erstelle einen Test auf Handy A. Die anderen Handys treten
-          per QR-Code bei und übernehmen die Front- und Rückansicht.
-        </p>
-
-        <div class="safety-note">
-          <strong>✓</strong>
-          <span>Passformhilfe für Geschirre. Keine tierärztliche Diagnose.</span>
-        </div>
-
-        <button id="startTestButton" class="button button-primary button-large" type="button">
-          3-KAMERA-TEST ERSTELLEN →
-        </button>
-
-        <button id="joinTestButton" class="button button-ghost button-large" type="button">
-          ICH TRETE EINEM TEST BEI →
-        </button>
-      </article>
-
-      <section class="feature-grid">
-        <article class="feature-card"><b>A</b><strong>Seite</strong><span>Schulter, Rücken, Gurte</span></article>
-        <article class="feature-card"><b>B</b><strong>Vorne</strong><span>Brust und Vorderhand</span></article>
-        <article class="feature-card"><b>C</b><strong>Hinten</strong><span>Becken und Hinterhand</span></article>
-        <article class="feature-card"><b>✓</b><strong>Ein Test</strong><span>Gleiche Test-ID auf allen Geräten</span></article>
-      </section>
-    </section>
-
-    <section id="screenProfile" class="screen">
-      <article class="wizard panel">
-        <div class="progress">
-          <span class="is-done">1</span><i></i><span>2</span><i></i><span>3</span><i></i><span>4</span>
-        </div>
-
-        <p class="eyebrow">SCHRITT 1 VON 4 · TEST ERSTELLEN</p>
-        <h2>Wen prüfen wir?</h2>
-
-        <p class="hint">Diese Angaben bleiben nur in diesem Browser gespeichert.</p>
-
-        <label class="field">
-          <span>NAME DES HUNDES</span>
-          <input id="dogName" type="text" placeholder="z. B. Ferox" autocomplete="off">
-        </label>
-
-        <label class="field">
-          <span>GESCHIRR / VARIANTE</span>
-          <input id="harnessName" type="text" placeholder="z. B. Sensor-Y Prototyp A" autocomplete="off">
-        </label>
-
-        <div class="wizard-nav">
-          <button id="profileBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
-          <button id="profileContinue" class="button button-primary" type="button">TEST-ID ERZEUGEN →</button>
-        </div>
-      </article>
-    </section>
-
-    <section id="screenJoin" class="screen">
-      <article class="wizard panel">
-        <p class="eyebrow">GERÄT B ODER C · TEST BEITRETEN</p>
-        <h2 id="joinTitle">QR-Code scannen</h2>
-
-        <p id="joinHint" class="hint">
-          Öffne die Handy-Kamera, scanne den QR-Code von Handy A und
-          tippe anschließend auf den angezeigten Best-Fit-Link.
-        </p>
-
-        <div id="joinedSessionCard" class="session-card is-hidden">
-          <span>VERBUNDENE TEST-ID</span>
-          <strong id="joinedTestId">BF-000000</strong>
-        </div>
-
-        <label id="manualJoinField" class="field">
-          <span>ODER TEST-ID MANUELL EINGEBEN</span>
-          <input id="manualTestId" type="text" placeholder="z. B. BF-7K2M9P" autocomplete="off">
-        </label>
-
-        <label class="field">
-          <span>DIESES HANDY IST</span>
-          <select id="joinRole">
-            <option value="B">KAMERA B · VORNE LINKS</option>
-            <option value="C">KAMERA C · HINTEN RECHTS</option>
-          </select>
-        </label>
-
-        <div class="wizard-nav">
-          <button id="joinBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
-          <button id="joinContinue" class="button button-primary" type="button">TEST BEITRETEN →</button>
-        </div>
-      </article>
-    </section>
-
-    <section id="screenInvite" class="screen">
-      <article class="wizard wizard-wide panel">
-        <div class="progress">
-          <span class="is-done">1</span><i class="is-done"></i><span class="is-done">2</span><i></i><span>3</span><i></i><span>4</span>
-        </div>
-
-        <p class="eyebrow">SCHRITT 2 VON 4 · KAMERAS BEITRETEN LASSEN</p>
-        <h2>Scanne mit Handy B und C</h2>
-
-        <p class="hint">
-          Beide Handys öffnen nach dem Scannen denselben Test.
-          Wähle dort Kamera B oder Kamera C.
-        </p>
-
-        <div class="invite-layout">
-          <div class="qr-card">
-            <div id="qrCode" class="qr-code" aria-label="QR-Code für Testbeitritt"></div>
-            <strong>TEST-ID: <span id="inviteTestId">BF-000000</span></strong>
-          </div>
-
-          <div class="invite-info">
-            <article class="session-card">
-              <span>HANDY A</span>
-              <strong>KAMERA A · SEITLICH</strong>
-              <small>Dieses Handy bleibt bei dir.</small>
-            </article>
-
-            <article class="session-card">
-              <span>HANDY B</span>
-              <strong>KAMERA B · VORNE LINKS</strong>
-              <small>QR-Code scannen, Rolle B wählen.</small>
-            </article>
-
-            <article class="session-card">
-              <span>HANDY C</span>
-              <strong>KAMERA C · HINTEN RECHTS</strong>
-              <small>QR-Code scannen, Rolle C wählen.</small>
-            </article>
-
-            <button id="copyJoinLinkButton" class="button button-ghost" type="button">
-              BEITRITTS-LINK KOPIEREN
-            </button>
-          </div>
-        </div>
-
-        <p id="copyStatus" class="camera-message">
-          Tipp: Wenn Scannen nicht klappt, verschicke den kopierten Link per WhatsApp.
-        </p>
-
-        <div class="wizard-nav">
-          <button id="inviteBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
-          <button id="inviteContinue" class="button button-primary" type="button">MIT KAMERA A WEITER →</button>
-        </div>
-      </article>
-    </section>
-
-    <section id="screenSetup" class="screen">
-      <article class="wizard wizard-wide panel">
-        <div class="progress">
-          <span class="is-done">1</span><i class="is-done"></i><span class="is-done">2</span><i class="is-done"></i><span class="is-done">3</span><i></i><span>4</span>
-        </div>
-
-        <p class="eyebrow">SCHRITT 3 VON 4 · AUFSTELLUNG</p>
-        <h2 id="setupTitle">Kamera A seitlich aufstellen</h2>
-
-        <p id="setupDescription" class="hint">
-          Stelle dieses Handy seitlich zur Strecke auf.
-          Der ganze Hund muss von Kopf bis Pfoten sichtbar sein.
-        </p>
-
-        <div class="setup-layout">
-          <div class="setup-map">
-            <div class="runway"></div>
-            <div class="dog-icon">🐕</div>
-            <div id="phoneMarker" class="phone-marker">A</div>
-            <div id="cameraDirection" class="camera-direction">SEITLICH</div>
-          </div>
-
-          <div class="checklist">
-            <p><strong>✓</strong> Handy steht fest oder liegt sicher auf</p>
-            <p><strong>✓</strong> Der ganze Hund passt dauerhaft ins Bild</p>
-            <p><strong>✓</strong> Gerade, ebene und gut beleuchtete Strecke</p>
-            <p><strong>✓</strong> Vor allen Kameras einmal sichtbar klatschen</p>
-          </div>
-        </div>
-
-        <div class="wizard-nav">
-          <button id="setupBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
-          <button id="setupContinue" class="button button-primary" type="button">KAMERA ÖFFNEN →</button>
-        </div>
-      </article>
-    </section>
-
-    <section id="screenRecord" class="screen">
-      <article class="wizard wizard-wide panel">
-        <div class="progress">
-          <span class="is-done">1</span><i class="is-done"></i><span class="is-done">2</span><i class="is-done"></i><span class="is-done">3</span><i class="is-done"></i><span class="is-done">4</span>
-        </div>
-
-        <p class="eyebrow">SCHRITT 4 VON 4 · LOKALE AUFNAHME</p>
-        <h2 id="recordTitle">Kamera A bereit machen</h2>
-
-        <p id="recordDescription" class="hint">
-          Öffne die Kamera. Wenn alle Geräte bereit sind, klatsche sichtbar
-          und nimm zwei kurze gerade Laufsequenzen auf.
-        </p>
-
-        <div class="quality-bar">
-          <strong>TEST-ID</strong>
-          <span id="recordTestId">BF-000000 · KAMERA A</span>
-        </div>
-
-        <div class="record-actions">
-          <button id="openCameraButton" class="button button-primary button-large" type="button">
-            KAMERA A ÖFFNEN
-          </button>
-
-          <button id="openResultButton" class="button button-ghost" type="button">
-            DEMO-ERGEBNIS ZEIGEN
-          </button>
-        </div>
-
-        <p id="recordStatus" class="camera-message">
-          Die Videos bleiben derzeit lokal auf jedem Handy. Die gemeinsame Cloud-Synchronisierung folgt später.
-        </p>
-
-        <div class="wizard-nav">
-          <button id="recordBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
-          <button id="finishTestButton" class="button button-primary" type="button">TEST ABSCHLIESSEN →</button>
-        </div>
-      </article>
-    </section>
-
-    <section id="screenResult" class="screen">
-      <div class="result-layout">
-        <article class="panel result-main">
-          <p class="eyebrow">BEST FIT · PROTOTYPERGEBNIS</p>
-          <h2>BEST FIT<br><span id="resultDogName">DEIN HUND</span></h2>
-
-          <div class="data-confidence">
-            <strong>TEST <span id="resultTestId">BF-000000</span></strong>
-            <small>UI-Prototyp: Noch keine echte automatische Videoanalyse.</small>
-          </div>
-
-          <div class="dog-model-stage">
-            <div class="dog-model">
-              <div class="dog-body"></div><div class="dog-head"></div>
-              <div class="dog-leg leg-one"></div><div class="dog-leg leg-two"></div>
-              <div class="dog-leg leg-three"></div><div class="dog-leg leg-four"></div>
-              <div class="harness-part harness-neck"></div>
-              <div class="harness-part harness-chest"></div>
-              <div class="harness-part harness-belly"></div>
-              <span class="hotspot hotspot-one">1</span>
-              <span class="hotspot hotspot-two">2</span>
-            </div>
-
-            <div class="legend">
-              <span class="legend-good">● stabil</span>
-              <span class="legend-warn">● prüfen</span>
-              <span class="legend-bad">● Sperrzone</span>
-            </div>
-          </div>
-
-          <div class="score-layout">
-            <div class="total-score"><strong>86</strong><span>BEST-FIT SCORE</span></div>
-
-            <div class="metric-bars">
-              <p>STABILITÄT <b>90</b><i><em style="width:90%"></em></i></p>
-              <p>BEWEGUNGSFREIHEIT <b>83</b><i><em style="width:83%"></em></i></p>
-              <p>LAUFBILD <b>87</b><i><em style="width:87%"></em></i></p>
-              <p>SYMMETRIE <b>84</b><i><em style="width:84%"></em></i></p>
-            </div>
-          </div>
-        </article>
-
-        <aside class="panel result-actions">
-          <p class="eyebrow">JETZT AM GESCHIRR</p>
-          <h3>2 kleine Anpassungen</h3>
-
-          <article class="result-tip tip-good">
-            <strong>✓ 1 · RÜCKENPLATTE</strong>
-            <p>Bleibt im Trab zentriert. So lassen.</p>
-          </article>
-
-          <article class="result-tip tip-warn">
-            <strong>! 2 · BAUCHGURT</strong>
-            <p>Etwa 8 mm weiter nach hinten stellen und den Trab erneut prüfen.</p>
-            <button id="retestButton" class="button button-warn" type="button">TRAB ERNEUT TESTEN →</button>
-          </article>
-
-          <button id="newTestButton" class="button button-primary" type="button">NEUEN TEST STARTEN</button>
-        </aside>
-      </div>
-    </section>
   </main>
 
   <dialog id="cameraDialog" class="camera-dialog">
@@ -815,40 +514,81 @@
           <h2 id="cameraDialogTitle">KAMERA A</h2>
         </div>
 
-        <button id="btnCameraClose" class="modal-close" type="button" aria-label="Kamera schließen">×</button>
+        <button
+          id="btnCameraClose"
+          class="modal-close"
+          type="button"
+          aria-label="Kamera schließen"
+        >
+          ×
+        </button>
       </header>
 
       <p id="cameraStatus" class="camera-status">
-        Kamera erst aktivieren, wenn du bereit bist.
+        Tippe auf „KAMERA AKTIVIEREN“.
       </p>
 
       <div class="camera-stage">
-        <video id="cameraPreview" autoplay muted playsinline></video>
-        <video id="cameraPlayback" controls playsinline hidden></video>
+        <video
+          id="cameraPreview"
+          autoplay
+          muted
+          playsinline
+        ></video>
+
+        <video
+          id="cameraPlayback"
+          controls
+          playsinline
+          hidden
+        ></video>
 
         <div class="camera-crosshair" aria-hidden="true">
-          <span></span><i></i>
+          <span></span>
+          <i></i>
         </div>
 
         <div class="camera-hud">
           <span id="cameraRoleLabel">KAMERA A · SEITE</span>
-          <strong id="cameraRecordLight">BEREIT</strong>
+          <strong id="cameraRecordLight">KAMERA AUS</strong>
         </div>
       </div>
 
       <div class="camera-controls">
-        <button id="btnCameraEnable" class="button button-primary" type="button">KAMERA AKTIVIEREN</button>
-        <button id="btnCameraRecord" class="button button-warn" type="button" disabled>AUFNAHME STARTEN</button>
-        <button id="btnCameraDiscard" class="button button-ghost" type="button" disabled>VERWERFEN</button>
+        <button
+          id="btnCameraEnable"
+          class="button button-primary"
+          type="button"
+        >
+          KAMERA AKTIVIEREN
+        </button>
+
+        <button
+          id="btnCameraRecord"
+          class="button button-warn"
+          type="button"
+          disabled
+        >
+          AUFNAHME STARTEN
+        </button>
+
+        <button
+          id="btnCameraDiscard"
+          class="button button-ghost"
+          type="button"
+          disabled
+        >
+          VERWERFEN
+        </button>
       </div>
 
       <p class="camera-privacy">
-        Das Video bleibt lokal auf diesem Handy. Es wird in dieser Version nicht automatisch hochgeladen.
+        Das Video bleibt lokal auf diesem Handy und wird nicht automatisch hochgeladen.
       </p>
     </section>
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
-  <script src="./app.js?v=1.1.0"></script>
+  <script src="./app.js?v=1.1.1"></script>
 </body>
 </html>
