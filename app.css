@@ -45,7 +45,7 @@ const setupSteps = [
 ];
 
 let setupIndex = 0;
-let recordingPhase = 0;
+let cameraStream = null;
 
 function showScreen(screenId) {
   document.querySelectorAll(".screen").forEach((screen) => {
@@ -65,144 +65,172 @@ function showScreen(screenId) {
 }
 
 function updateClock() {
-  const liveTime = byId("liveTime");
+  const clock = byId("liveTime");
 
-  if (liveTime) {
-    liveTime.textContent = new Date().toLocaleTimeString("de-DE");
+  if (clock) {
+    clock.textContent = new Date().toLocaleTimeString("de-DE");
   }
 }
 
 function renderSetup() {
   const step = setupSteps[setupIndex];
-
-  const title = byId("setupTitle");
-  const description = byId("setupDescription");
   const marker = byId("phoneMarker");
-  const direction = byId("cameraDirection");
-  const continueButton = byId("setupContinue");
 
-  title.textContent = step.title;
-  description.textContent = step.description;
+  byId("setupTitle").textContent = step.title;
+  byId("setupDescription").textContent = step.description;
+  byId("cameraDirection").textContent = step.direction;
+
   marker.textContent = step.letter;
-  direction.textContent = step.direction;
-
   marker.style.left = step.position.left;
   marker.style.right = step.position.right;
   marker.style.top = step.position.top;
   marker.style.bottom = step.position.bottom;
 
-  if (setupIndex === setupSteps.length - 1) {
-    continueButton.textContent = "KAMERAS SIND BEREIT →";
-  } else {
-    continueButton.textContent = "POSITION STIMMT →";
+  byId("setupContinue").textContent =
+    setupIndex === setupSteps.length - 1
+      ? "KAMERAS SIND BEREIT →"
+      : "POSITION STIMMT →";
+}
+
+function setCameraMessage(message, isError = false) {
+  const messageBox = byId("cameraMessage");
+
+  messageBox.textContent = message;
+  messageBox.classList.toggle("is-error", isError);
+}
+
+function setLiveStatus(message) {
+  byId("cameraLiveStatus").textContent = message;
+}
+
+function stopCamera() {
+  if (cameraStream) {
+    cameraStream.getTracks().forEach((track) => {
+      track.stop();
+    });
+
+    cameraStream = null;
+  }
+
+  const preview = byId("cameraPreview");
+
+  if (preview) {
+    preview.srcObject = null;
+  }
+
+  setLiveStatus("KAMERA AUS");
+}
+
+async function startCamera(facingMode) {
+  stopCamera();
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    setCameraMessage(
+      "Diese Browseransicht unterstützt keinen Kamerazugriff. Öffne die echte GitHub-Pages-URL direkt in Chrome.",
+      true
+    );
+    return;
+  }
+
+  try {
+    setLiveStatus("ÖFFNET...");
+    setCameraMessage(
+      "Chrome fragt jetzt nach Kamerazugriff. Tippe auf „Zulassen“."
+    );
+
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        facingMode: {
+          ideal: facingMode
+        },
+        width: {
+          ideal: 1280
+        },
+        height: {
+          ideal: 720
+        }
+      }
+    });
+
+    const preview = byId("cameraPreview");
+
+    preview.srcObject = cameraStream;
+
+    await preview.play();
+
+    setLiveStatus(
+      facingMode === "environment"
+        ? "RÜCKKAMERA AKTIV"
+        : "FRONTKAMERA AKTIV"
+    );
+
+    setCameraMessage(
+      "Kamera aktiv. Prüfe: Der ganze Hund muss von Kopf bis Pfoten im Bild sein."
+    );
+
+    byId("qualityText").textContent =
+      "Kamera aktiv · Bildausschnitt bitte prüfen";
+
+    byId("recordButton").textContent =
+      "AUFNAHME FÜR DEMO BESTÄTIGEN";
+
+    byId("recordContinue").classList.remove("is-hidden");
+  } catch (error) {
+    let message =
+      "Die Kamera konnte nicht geöffnet werden. Bitte versuche es erneut.";
+
+    if (error.name === "NotAllowedError") {
+      message =
+        "Kamerazugriff wurde blockiert. Tippe in Chrome auf das Schloss oder das Regler-Symbol neben der Adresse und erlaube die Kamera.";
+    }
+
+    if (error.name === "NotFoundError") {
+      message =
+        "Keine verwendbare Kamera gefunden. Prüfe, ob eine andere App die Kamera geöffnet hat.";
+    }
+
+    if (error.name === "NotReadableError") {
+      message =
+        "Die Kamera wird gerade von einer anderen App benutzt. Schließe Kamera, WhatsApp oder Instagram und probiere es erneut.";
+    }
+
+    setLiveStatus("KAMERA FEHLER");
+    setCameraMessage(message, true);
+    byId("qualityText").textContent = "Kamera nicht verfügbar";
   }
 }
 
-function setCameraStatus(text) {
-  [
-    "cameraAStatus",
-    "cameraBStatus",
-    "cameraCStatus"
-  ].forEach((id) => {
-    const element = byId(id);
-
-    if (element) {
-      element.textContent = text;
-    }
-  });
-}
-
-function resetRecordScreen() {
-  recordingPhase = 0;
+function resetRecordingScreen() {
+  stopCamera();
 
   byId("recordTitle").textContent =
-    "Erst ein kurzes Startsignal";
+    "Kamera dieses Handys aktivieren";
 
   byId("recordDescription").textContent =
-    "Starte alle drei Handys. Stelle dich kurz vor den Hund und klatsche einmal sichtbar.";
+    "Dieses Handy übernimmt eine Kameraansicht. Öffne die Kamera, prüfe den Bildausschnitt und starte erst dann die Aufnahme.";
 
   byId("qualityText").textContent =
-    "Bereit für die Aufnahme";
+    "Kamera noch nicht aktiviert";
 
   byId("recordButton").textContent =
-    "● STARTSIGNAL BESTÄTIGEN";
+    "KAMERA AKTIVIEREN";
 
-  byId("recordButton").classList.remove("is-hidden");
   byId("recordContinue").classList.add("is-hidden");
 
-  setCameraStatus("WARTET");
-}
-
-function updateRecordStep() {
-  const title = byId("recordTitle");
-  const description = byId("recordDescription");
-  const quality = byId("qualityText");
-  const button = byId("recordButton");
-  const continueButton = byId("recordContinue");
-
-  if (recordingPhase === 0) {
-    recordingPhase = 1;
-
-    title.textContent =
-      "Jetzt zwei kurze, gerade Läufe";
-
-    description.textContent =
-      "Lass den Hund erst ruhig gehen und dann traben. Wenn er stehen bleibt oder zieht, wiederhole den Lauf einfach.";
-
-    quality.textContent =
-      "Startsignal erkannt · Kameras können synchronisiert werden";
-
-    button.textContent =
-      "● WALK & TRAB AUFNAHME STARTEN";
-
-    setCameraStatus("BEREIT");
-    return;
-  }
-
-  if (recordingPhase === 1) {
-    recordingPhase = 2;
-
-    title.textContent =
-      "Aufnahme läuft";
-
-    description.textContent =
-      "Führe den Hund locker und gerade über die Strecke. Ziel sind zwei kurze, gleichmäßige Durchgänge.";
-
-    quality.textContent =
-      "Aufnahme läuft · Hund bitte geradeaus führen";
-
-    button.textContent =
-      "■ AUFNAHME BEENDEN";
-
-    setCameraStatus("REC");
-    return;
-  }
-
-  recordingPhase = 3;
-
-  title.textContent =
-    "Aufnahme ausreichend";
-
-  description.textContent =
-    "Die Testaufnahme ist ausreichend. Du kannst jetzt die Best-Fit-Auswertung öffnen.";
-
-  quality.textContent =
-    "Gut genug · 3 Kameras · verwertbare Laufsequenz erkannt";
-
-  setCameraStatus("OK");
-
-  button.classList.add("is-hidden");
-  continueButton.classList.remove("is-hidden");
+  setCameraMessage(
+    "Tippe auf „KAMERA AKTIVIEREN“. Erlaube Chrome anschließend den Zugriff auf die Kamera."
+  );
 }
 
 function openResult() {
-  const dogName = byId("dogName").value.trim();
-  const resultDogName = byId("resultDogName");
+  const name = byId("dogName").value.trim();
 
-  resultDogName.textContent = dogName
-    ? dogName.toUpperCase()
+  byId("resultDogName").textContent = name
+    ? name.toUpperCase()
     : "DEIN HUND";
 
+  stopCamera();
   showScreen("screenResult");
 }
 
@@ -212,29 +240,6 @@ function openHelp() {
 
 function closeHelp() {
   byId("helpModal").classList.add("is-hidden");
-}
-
-function startRetest() {
-  recordingPhase = 1;
-
-  byId("recordTitle").textContent =
-    "Nur den Trab noch einmal aufnehmen";
-
-  byId("recordDescription").textContent =
-    "Der Bauchgurt wurde angepasst. Mache jetzt zwei kurze Trab-Läufe auf derselben Strecke.";
-
-  byId("qualityText").textContent =
-    "Wiederholung vorbereitet · nur Trab aufnehmen";
-
-  byId("recordButton").textContent =
-    "● TRAB-AUFNAHME STARTEN";
-
-  byId("recordButton").classList.remove("is-hidden");
-  byId("recordContinue").classList.add("is-hidden");
-
-  setCameraStatus("BEREIT");
-
-  showScreen("screenRecord");
 }
 
 function bindEvents() {
@@ -271,16 +276,46 @@ function bindEvents() {
       return;
     }
 
-    resetRecordScreen();
+    resetRecordingScreen();
     showScreen("screenRecord");
   });
 
   byId("recordBackButton").addEventListener("click", () => {
+    stopCamera();
     showScreen("screenSetup");
   });
 
+  byId("cameraRearButton").addEventListener("click", () => {
+    startCamera("environment");
+  });
+
+  byId("cameraFrontButton").addEventListener("click", () => {
+    startCamera("user");
+  });
+
+  byId("cameraStopButton").addEventListener("click", () => {
+    stopCamera();
+
+    byId("qualityText").textContent =
+      "Kamera gestoppt";
+
+    setCameraMessage(
+      "Kamera ist gestoppt. Du kannst sie jederzeit wieder aktivieren."
+    );
+  });
+
   byId("recordButton").addEventListener("click", () => {
-    updateRecordStep();
+    if (!cameraStream) {
+      startCamera("environment");
+      return;
+    }
+
+    byId("qualityText").textContent =
+      "Demo-Aufnahme bestätigt · bereit zur Auswertung";
+
+    setCameraMessage(
+      "Bild bestätigt. In der nächsten Version speichern wir echte Videoclips und synchronisieren die drei Handys."
+    );
   });
 
   byId("recordContinue").addEventListener("click", () => {
@@ -306,19 +341,31 @@ function bindEvents() {
   });
 
   byId("retestButton").addEventListener("click", () => {
-    startRetest();
+    resetRecordingScreen();
+    byId("recordTitle").textContent =
+      "Nur den Trab erneut aufnehmen";
+
+    byId("recordDescription").textContent =
+      "Der Bauchgurt wurde angepasst. Öffne die Kamera und prüfe den Trab erneut.";
+
+    showScreen("screenRecord");
   });
 
   byId("newTestButton").addEventListener("click", () => {
+    stopCamera();
+
     byId("dogName").value = "";
     byId("harnessName").value = "";
+
     showScreen("screenWelcome");
   });
+
+  window.addEventListener("pagehide", stopCamera);
 }
 
 function init() {
   renderSetup();
-  resetRecordScreen();
+  resetRecordingScreen();
   updateClock();
   bindEvents();
 
