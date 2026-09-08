@@ -2,32 +2,20 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#070908">
-
   <title>HARNELYZER · BEST FIT</title>
-
-  <link rel="stylesheet" href="./style.css?v=1.1.1">
+  <link rel="stylesheet" href="./style.css?v=1.1.3">
 </head>
 
 <body>
   <main class="app">
-
     <header class="topbar">
       <div class="brand">
         <div class="brand-mark" aria-hidden="true">H</div>
-
         <div class="brand-copy">
           <p>HARNELYZER / BEST FIT ENGINE</p>
-
-          <h1>
-            GESCHIRR<br>
-            <span>BEST FIT</span>
-          </h1>
+          <h1>GESCHIRR<br><span>BEST FIT</span></h1>
         </div>
       </div>
 
@@ -41,128 +29,62 @@
     <section id="screenWelcome" class="screen is-active">
       <article class="hero panel">
         <p class="eyebrow">3 KAMERAS · EIN TEST</p>
-
-        <h2>
-          Finde die beste Einstellung<br>
-          für <span>deinen Hund.</span>
-        </h2>
+        <h2>Finde die beste Einstellung<br>für <span>deinen Hund.</span></h2>
 
         <p class="lead">
-          Erstelle den Test zuerst auf Handy A. Danach scannst du
-          den QR-Code mit Handy B und Handy C.
+          Erstelle den Test auf Handy A. Die anderen Handys treten per QR-Code
+          bei und übernehmen die Front- und Rückansicht.
         </p>
 
         <div class="safety-note">
           <strong>✓</strong>
-
-          <span>
-            Passformhilfe für Geschirre. Keine tierärztliche Diagnose.
-          </span>
+          <span>Passformhilfe für Geschirre. Keine tierärztliche Diagnose.</span>
         </div>
 
-        <button
-          id="startTestButton"
-          class="button button-primary button-large"
-          type="button"
-        >
+        <button id="startTestButton" class="button button-primary button-large" type="button">
           3-KAMERA-TEST ERSTELLEN →
         </button>
 
-        <button
-          id="joinTestButton"
-          class="button button-ghost button-large"
-          type="button"
-        >
+        <button id="joinTestButton" class="button button-ghost button-large" type="button">
           ICH TRETE EINEM TEST BEI →
         </button>
       </article>
 
       <section class="feature-grid">
-        <article class="feature-card">
-          <b>A</b>
-          <strong>Seite</strong>
-          <span>Schulter, Rücken und Gurte</span>
-        </article>
-
-        <article class="feature-card">
-          <b>B</b>
-          <strong>Vorne</strong>
-          <span>Brust und Vorderhand</span>
-        </article>
-
-        <article class="feature-card">
-          <b>C</b>
-          <strong>Hinten</strong>
-          <span>Becken und Hinterhand</span>
-        </article>
-
-        <article class="feature-card">
-          <b>✓</b>
-          <strong>Ein Test</strong>
-          <span>Gleiche Test-ID auf allen Geräten</span>
-        </article>
+        <article class="feature-card"><b>A</b><strong>Seite</strong><span>Schulter, Rücken und Gurte</span></article>
+        <article class="feature-card"><b>B</b><strong>Vorne</strong><span>Brust und Vorderhand</span></article>
+        <article class="feature-card"><b>C</b><strong>Hinten</strong><span>Becken und Hinterhand</span></article>
+        <article class="feature-card"><b>✓</b><strong>Ein Test</strong><span>Gleiche Test-ID auf allen Geräten</span></article>
       </section>
     </section>
 
     <section id="screenProfile" class="screen">
       <article class="wizard panel">
         <div class="progress">
-          <span class="is-done">1</span>
-          <i></i>
-          <span>2</span>
-          <i></i>
-          <span>3</span>
-          <i></i>
-          <span>4</span>
+          <span class="is-done">1</span><i></i><span>2</span><i></i><span>3</span><i></i><span>4</span>
         </div>
 
         <p class="eyebrow">SCHRITT 1 VON 4 · TEST ERSTELLEN</p>
-
         <h2>Wen prüfen wir?</h2>
 
         <p class="hint">
-          Gib den Namen deines Hundes ein. Dann erstellen wir eine
-          gemeinsame Test-ID für alle drei Handys.
+          Gib den Namen deines Hundes ein. Dann erstellen wir eine gemeinsame
+          Test-ID für alle drei Handys.
         </p>
 
         <label class="field">
           <span>NAME DES HUNDES</span>
-
-          <input
-            id="dogName"
-            type="text"
-            placeholder="z. B. Ferox"
-            autocomplete="off"
-          >
+          <input id="dogName" type="text" placeholder="z. B. Ferox" autocomplete="off">
         </label>
 
         <label class="field">
           <span>GESCHIRR / VARIANTE</span>
-
-          <input
-            id="harnessName"
-            type="text"
-            placeholder="z. B. Sensor-Y Prototyp A"
-            autocomplete="off"
-          >
+          <input id="harnessName" type="text" placeholder="z. B. Prototyp A" autocomplete="off">
         </label>
 
         <div class="wizard-nav">
-          <button
-            id="profileBackButton"
-            class="button button-ghost"
-            type="button"
-          >
-            ← ZURÜCK
-          </button>
-
-          <button
-            id="profileContinue"
-            class="button button-primary"
-            type="button"
-          >
-            TEST-ID ERZEUGEN →
-          </button>
+          <button id="profileBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
+          <button id="profileContinue" class="button button-primary" type="button">TEST-ID ERZEUGEN →</button>
         </div>
       </article>
     </section>
@@ -170,36 +92,25 @@
     <section id="screenJoin" class="screen">
       <article class="wizard panel">
         <p class="eyebrow">HANDY B ODER C · TEST BEITRETEN</p>
-
         <h2 id="joinTitle">Test-ID eingeben</h2>
 
         <p id="joinHint" class="hint">
-          Scanne den QR-Code von Handy A mit deiner normalen
-          Handy-Kamera. Öffne anschließend den angezeigten Link.
+          Scanne den QR-Code von Handy A mit deiner normalen Handy-Kamera.
+          Öffne danach den angezeigten Link.
         </p>
 
-        <div
-          id="joinedSessionCard"
-          class="session-card is-hidden"
-        >
+        <div id="joinedSessionCard" class="session-card is-hidden">
           <span>VERBUNDENE TEST-ID</span>
           <strong id="joinedTestId">BF-000000</strong>
         </div>
 
         <label id="manualJoinField" class="field">
           <span>ODER TEST-ID MANUELL EINGEBEN</span>
-
-          <input
-            id="manualTestId"
-            type="text"
-            placeholder="z. B. BF-7K2M9P"
-            autocomplete="off"
-          >
+          <input id="manualTestId" type="text" placeholder="z. B. BF-7K2M9P" autocomplete="off">
         </label>
 
         <label class="field">
           <span>DIESES HANDY IST</span>
-
           <select id="joinRole">
             <option value="B">KAMERA B · VORNE LINKS</option>
             <option value="C">KAMERA C · HINTEN RECHTS</option>
@@ -207,21 +118,8 @@
         </label>
 
         <div class="wizard-nav">
-          <button
-            id="joinBackButton"
-            class="button button-ghost"
-            type="button"
-          >
-            ← ZURÜCK
-          </button>
-
-          <button
-            id="joinContinue"
-            class="button button-primary"
-            type="button"
-          >
-            TEST BEITRETEN →
-          </button>
+          <button id="joinBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
+          <button id="joinContinue" class="button button-primary" type="button">TEST BEITRETEN →</button>
         </div>
       </article>
     </section>
@@ -229,34 +127,21 @@
     <section id="screenInvite" class="screen">
       <article class="wizard wizard-wide panel">
         <div class="progress">
-          <span class="is-done">1</span>
-          <i class="is-done"></i>
-          <span class="is-done">2</span>
-          <i></i>
-          <span>3</span>
-          <i></i>
-          <span>4</span>
+          <span class="is-done">1</span><i class="is-done"></i><span class="is-done">2</span><i></i><span>3</span><i></i><span>4</span>
         </div>
 
         <p class="eyebrow">SCHRITT 2 VON 4 · HANDYS BEITRETEN LASSEN</p>
-
         <h2>Handy B und C verbinden</h2>
 
         <p class="hint">
-          Scanne den QR-Code mit den anderen Handys. Falls das nicht
-          klappt, verschicke den Link per WhatsApp oder kopiere die Test-ID.
+          Scanne den QR-Code mit den anderen Handys. Falls das nicht klappt,
+          verschicke den Beitritts-Link per WhatsApp.
         </p>
 
         <div class="invite-layout">
           <div class="qr-card">
-            <div id="qrCode" class="qr-code">
-              QR-CODE WIRD ERSTELLT ...
-            </div>
-
-            <strong>
-              TEST-ID:
-              <span id="inviteTestId">BF-000000</span>
-            </strong>
+            <div id="qrCode" class="qr-code">QR-CODE WIRD ERSTELLT ...</div>
+            <strong>TEST-ID: <span id="inviteTestId">BF-000000</span></strong>
           </div>
 
           <div class="invite-info">
@@ -278,37 +163,19 @@
               <small>QR-Code scannen und Rolle C wählen.</small>
             </article>
 
-            <button
-              id="copyJoinLinkButton"
-              class="button button-ghost"
-              type="button"
-            >
+            <button id="copyJoinLinkButton" class="button button-ghost" type="button">
               BEITRITTS-LINK KOPIEREN
             </button>
           </div>
         </div>
 
         <p id="copyStatus" class="camera-message">
-          Der QR-Code enthält die Test-ID. Kamera B und C treten damit
-          derselben Aufnahmegruppe bei.
+          Der QR-Code enthält die Test-ID. Kamera B und C treten damit derselben Aufnahmegruppe bei.
         </p>
 
         <div class="wizard-nav">
-          <button
-            id="inviteBackButton"
-            class="button button-ghost"
-            type="button"
-          >
-            ← ZURÜCK
-          </button>
-
-          <button
-            id="inviteContinue"
-            class="button button-primary"
-            type="button"
-          >
-            MIT KAMERA A WEITER →
-          </button>
+          <button id="inviteBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
+          <button id="inviteContinue" class="button button-primary" type="button">MIT KAMERA A WEITER →</button>
         </div>
       </article>
     </section>
@@ -316,11 +183,10 @@
     <section id="screenSetup" class="screen">
       <article class="wizard wizard-wide panel">
         <p class="eyebrow">SCHRITT 3 VON 4 · AUFSTELLUNG</p>
-
         <h2 id="setupTitle">Kamera A seitlich aufstellen</h2>
 
         <p id="setupDescription" class="hint">
-          Stelle das Handy seitlich an der Laufstrecke auf.
+          Stelle dieses Handy seitlich an der Laufstrecke auf.
         </p>
 
         <div class="setup-layout">
@@ -340,21 +206,8 @@
         </div>
 
         <div class="wizard-nav">
-          <button
-            id="setupBackButton"
-            class="button button-ghost"
-            type="button"
-          >
-            ← ZURÜCK
-          </button>
-
-          <button
-            id="setupContinue"
-            class="button button-primary"
-            type="button"
-          >
-            KAMERA ÖFFNEN →
-          </button>
+          <button id="setupBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
+          <button id="setupContinue" class="button button-primary" type="button">KAMERA ÖFFNEN →</button>
         </div>
       </article>
     </section>
@@ -362,12 +215,11 @@
     <section id="screenRecord" class="screen">
       <article class="wizard wizard-wide panel">
         <p class="eyebrow">SCHRITT 4 VON 4 · AUFNAHME</p>
-
         <h2 id="recordTitle">Kamera A bereit machen</h2>
 
         <p class="hint">
-          Kamera öffnen, Bildausschnitt prüfen und dann die Aufnahme
-          starten. Das Video bleibt zunächst auf diesem Handy.
+          Wähle zuerst die gewünschte Bildrate. Dann Kamera öffnen,
+          Bildausschnitt prüfen und Aufnahme starten.
         </p>
 
         <div class="quality-bar">
@@ -376,44 +228,22 @@
         </div>
 
         <div class="record-actions">
-          <button
-            id="openCameraButton"
-            class="button button-primary button-large"
-            type="button"
-          >
+          <button id="openCameraButton" class="button button-primary button-large" type="button">
             KAMERA A ÖFFNEN
           </button>
 
-          <button
-            id="openResultButton"
-            class="button button-ghost"
-            type="button"
-          >
+          <button id="openResultButton" class="button button-ghost" type="button">
             DEMO-ERGEBNIS ZEIGEN
           </button>
         </div>
 
         <p id="recordStatus" class="camera-message">
-          Videos werden aktuell noch nicht zwischen Geräten übertragen.
-          Alle Handys tragen aber dieselbe Test-ID.
+          Die tatsächliche Bildrate wird nach dem Aktivieren der Kamera angezeigt.
         </p>
 
         <div class="wizard-nav">
-          <button
-            id="recordBackButton"
-            class="button button-ghost"
-            type="button"
-          >
-            ← ZURÜCK
-          </button>
-
-          <button
-            id="finishTestButton"
-            class="button button-primary"
-            type="button"
-          >
-            TEST ABSCHLIESSEN →
-          </button>
+          <button id="recordBackButton" class="button button-ghost" type="button">← ZURÜCK</button>
+          <button id="finishTestButton" class="button button-primary" type="button">TEST ABSCHLIESSEN →</button>
         </div>
       </article>
     </section>
@@ -422,11 +252,7 @@
       <div class="result-layout">
         <article class="panel result-main">
           <p class="eyebrow">BEST FIT · PROTOTYPERGEBNIS</p>
-
-          <h2>
-            BEST FIT<br>
-            <span id="resultDogName">DEIN HUND</span>
-          </h2>
+          <h2>BEST FIT<br><span id="resultDogName">DEIN HUND</span></h2>
 
           <div class="data-confidence">
             <strong>TEST: <span id="resultTestId">BF-000000</span></strong>
@@ -472,7 +298,6 @@
 
         <aside class="panel result-actions">
           <p class="eyebrow">JETZT AM GESCHIRR</p>
-
           <h3>2 kleine Anpassungen</h3>
 
           <article class="result-tip tip-good">
@@ -483,27 +308,15 @@
           <article class="result-tip tip-warn">
             <strong>! 2 · BAUCHGURT</strong>
             <p>Etwa 8 mm weiter nach hinten stellen und Trab erneut prüfen.</p>
-
-            <button
-              id="retestButton"
-              class="button button-warn"
-              type="button"
-            >
-              TRAB ERNEUT TESTEN →
-            </button>
+            <button id="retestButton" class="button button-warn" type="button">TRAB ERNEUT TESTEN →</button>
           </article>
 
-          <button
-            id="newTestButton"
-            class="button button-primary"
-            type="button"
-          >
+          <button id="newTestButton" class="button button-primary" type="button">
             NEUEN TEST STARTEN
           </button>
         </aside>
       </div>
     </section>
-
   </main>
 
   <dialog id="cameraDialog" class="camera-dialog">
@@ -514,34 +327,30 @@
           <h2 id="cameraDialogTitle">KAMERA A</h2>
         </div>
 
-        <button
-          id="btnCameraClose"
-          class="modal-close"
-          type="button"
-          aria-label="Kamera schließen"
-        >
-          ×
-        </button>
+        <button id="btnCameraClose" class="modal-close" type="button" aria-label="Kamera schließen">×</button>
       </header>
 
+      <label class="field">
+        <span>BILDRATE WÄHLEN</span>
+
+        <select id="cameraFrameRate">
+          <option value="30">STANDARD · 30 FPS</option>
+          <option value="60" selected>DETAIL · 60 FPS</option>
+          <option value="120">ZEITLUPE · 120 FPS</option>
+        </select>
+      </label>
+
+      <p id="cameraActualSettings" class="camera-message">
+        Gewählt: 60 fps. Die echte Bildrate wird nach der Kamera-Freigabe angezeigt.
+      </p>
+
       <p id="cameraStatus" class="camera-status">
-        Tippe auf „KAMERA AKTIVIEREN“.
+        Wähle eine Bildrate und tippe dann auf „KAMERA AKTIVIEREN“.
       </p>
 
       <div class="camera-stage">
-        <video
-          id="cameraPreview"
-          autoplay
-          muted
-          playsinline
-        ></video>
-
-        <video
-          id="cameraPlayback"
-          controls
-          playsinline
-          hidden
-        ></video>
+        <video id="cameraPreview" autoplay muted playsinline></video>
+        <video id="cameraPlayback" controls playsinline hidden></video>
 
         <div class="camera-crosshair" aria-hidden="true">
           <span></span>
@@ -555,29 +364,15 @@
       </div>
 
       <div class="camera-controls">
-        <button
-          id="btnCameraEnable"
-          class="button button-primary"
-          type="button"
-        >
+        <button id="btnCameraEnable" class="button button-primary" type="button">
           KAMERA AKTIVIEREN
         </button>
 
-        <button
-          id="btnCameraRecord"
-          class="button button-warn"
-          type="button"
-          disabled
-        >
+        <button id="btnCameraRecord" class="button button-warn" type="button" disabled>
           AUFNAHME STARTEN
         </button>
 
-        <button
-          id="btnCameraDiscard"
-          class="button button-ghost"
-          type="button"
-          disabled
-        >
+        <button id="btnCameraDiscard" class="button button-ghost" type="button" disabled>
           VERWERFEN
         </button>
       </div>
@@ -589,6 +384,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
-  <script src="./app.js?v=1.1.1"></script>
+  <script src="./app.js?v=1.1.3"></script>
 </body>
 </html>
