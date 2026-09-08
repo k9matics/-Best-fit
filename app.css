@@ -1,375 +1,44 @@
 "use strict";
 
-const byId = (id) => document.getElementById(id);
+(function () {
+  function start() {
+    const button = document.getElementById("startTestButton");
 
-const setupSteps = [
-  {
-    title: "Handy A seitlich aufstellen",
-    description:
-      "Stell das Handy ungefähr auf Höhe von Schulter und Ellbogen. Der Hund läuft später gerade an der Kamera vorbei.",
-    letter: "A",
-    direction: "SEITLICH",
-    position: {
-      left: "48%",
-      right: "auto",
-      top: "auto",
-      bottom: "20px"
+    if (!button) {
+      document.body.insertAdjacentHTML(
+        "afterbegin",
+        '<div style="position:fixed;z-index:99999;top:0;left:0;right:0;padding:12px;background:#df5f5b;color:#fff;font:14px monospace">FEHLER: startTestButton wurde nicht in index.html gefunden.</div>'
+      );
+      return;
     }
-  },
-  {
-    title: "Handy B schräg vorne aufstellen",
-    description:
-      "Stell das Handy vorne links neben die Laufstrecke. Diese Ansicht hilft bei Brust, Vorderhand und Symmetrie.",
-    letter: "B",
-    direction: "VORNE LINKS",
-    position: {
-      left: "11%",
-      right: "auto",
-      top: "25%",
-      bottom: "auto"
-    }
-  },
-  {
-    title: "Handy C schräg hinten aufstellen",
-    description:
-      "Stell das Handy hinter der Laufstrecke auf. Diese Ansicht hilft bei Hinterhand, Becken und seitlichem Ausweichen.",
-    letter: "C",
-    direction: "HINTEN RECHTS",
-    position: {
-      left: "auto",
-      right: "10%",
-      top: "25%",
-      bottom: "auto"
-    }
-  }
-];
 
-let setupIndex = 0;
-let cameraStream = null;
+    button.addEventListener("click", function () {
+      const welcome = document.getElementById("screenWelcome");
+      const profile = document.getElementById("screenProfile");
 
-function showScreen(screenId) {
-  document.querySelectorAll(".screen").forEach((screen) => {
-    screen.classList.remove("is-active");
-  });
-
-  const screen = byId(screenId);
-
-  if (screen) {
-    screen.classList.add("is-active");
-  }
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-function updateClock() {
-  const clock = byId("liveTime");
-
-  if (clock) {
-    clock.textContent = new Date().toLocaleTimeString("de-DE");
-  }
-}
-
-function renderSetup() {
-  const step = setupSteps[setupIndex];
-  const marker = byId("phoneMarker");
-
-  byId("setupTitle").textContent = step.title;
-  byId("setupDescription").textContent = step.description;
-  byId("cameraDirection").textContent = step.direction;
-
-  marker.textContent = step.letter;
-  marker.style.left = step.position.left;
-  marker.style.right = step.position.right;
-  marker.style.top = step.position.top;
-  marker.style.bottom = step.position.bottom;
-
-  byId("setupContinue").textContent =
-    setupIndex === setupSteps.length - 1
-      ? "KAMERAS SIND BEREIT →"
-      : "POSITION STIMMT →";
-}
-
-function setCameraMessage(message, isError = false) {
-  const messageBox = byId("cameraMessage");
-
-  messageBox.textContent = message;
-  messageBox.classList.toggle("is-error", isError);
-}
-
-function setLiveStatus(message) {
-  byId("cameraLiveStatus").textContent = message;
-}
-
-function stopCamera() {
-  if (cameraStream) {
-    cameraStream.getTracks().forEach((track) => {
-      track.stop();
-    });
-
-    cameraStream = null;
-  }
-
-  const preview = byId("cameraPreview");
-
-  if (preview) {
-    preview.srcObject = null;
-  }
-
-  setLiveStatus("KAMERA AUS");
-}
-
-async function startCamera(facingMode) {
-  stopCamera();
-
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    setCameraMessage(
-      "Diese Browseransicht unterstützt keinen Kamerazugriff. Öffne die echte GitHub-Pages-URL direkt in Chrome.",
-      true
-    );
-    return;
-  }
-
-  try {
-    setLiveStatus("ÖFFNET...");
-    setCameraMessage(
-      "Chrome fragt jetzt nach Kamerazugriff. Tippe auf „Zulassen“."
-    );
-
-    cameraStream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: {
-          ideal: facingMode
-        },
-        width: {
-          ideal: 1280
-        },
-        height: {
-          ideal: 720
-        }
+      if (welcome) {
+        welcome.classList.remove("is-active");
       }
+
+      if (profile) {
+        profile.classList.add("is-active");
+      }
+
+      document.body.insertAdjacentHTML(
+        "beforeend",
+        '<div id="jsProof" style="position:fixed;z-index:99999;right:12px;bottom:12px;padding:12px;background:#17484a;border:1px solid #72dadd;color:#72dadd;font:14px monospace">JS LÄUFT ✓</div>'
+      );
     });
 
-    const preview = byId("cameraPreview");
-
-    preview.srcObject = cameraStream;
-
-    await preview.play();
-
-    setLiveStatus(
-      facingMode === "environment"
-        ? "RÜCKKAMERA AKTIV"
-        : "FRONTKAMERA AKTIV"
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      '<div style="position:fixed;z-index:99999;right:12px;bottom:12px;padding:12px;background:#172018;border:1px solid #a8bc69;color:#a8bc69;font:12px monospace">APP.JS GELADEN ✓</div>'
     );
-
-    setCameraMessage(
-      "Kamera aktiv. Prüfe: Der ganze Hund muss von Kopf bis Pfoten im Bild sein."
-    );
-
-    byId("qualityText").textContent =
-      "Kamera aktiv · Bildausschnitt bitte prüfen";
-
-    byId("recordButton").textContent =
-      "AUFNAHME FÜR DEMO BESTÄTIGEN";
-
-    byId("recordContinue").classList.remove("is-hidden");
-  } catch (error) {
-    let message =
-      "Die Kamera konnte nicht geöffnet werden. Bitte versuche es erneut.";
-
-    if (error.name === "NotAllowedError") {
-      message =
-        "Kamerazugriff wurde blockiert. Tippe in Chrome auf das Schloss oder das Regler-Symbol neben der Adresse und erlaube die Kamera.";
-    }
-
-    if (error.name === "NotFoundError") {
-      message =
-        "Keine verwendbare Kamera gefunden. Prüfe, ob eine andere App die Kamera geöffnet hat.";
-    }
-
-    if (error.name === "NotReadableError") {
-      message =
-        "Die Kamera wird gerade von einer anderen App benutzt. Schließe Kamera, WhatsApp oder Instagram und probiere es erneut.";
-    }
-
-    setLiveStatus("KAMERA FEHLER");
-    setCameraMessage(message, true);
-    byId("qualityText").textContent = "Kamera nicht verfügbar";
   }
-}
 
-function resetRecordingScreen() {
-  stopCamera();
-
-  byId("recordTitle").textContent =
-    "Kamera dieses Handys aktivieren";
-
-  byId("recordDescription").textContent =
-    "Dieses Handy übernimmt eine Kameraansicht. Öffne die Kamera, prüfe den Bildausschnitt und starte erst dann die Aufnahme.";
-
-  byId("qualityText").textContent =
-    "Kamera noch nicht aktiviert";
-
-  byId("recordButton").textContent =
-    "KAMERA AKTIVIEREN";
-
-  byId("recordContinue").classList.add("is-hidden");
-
-  setCameraMessage(
-    "Tippe auf „KAMERA AKTIVIEREN“. Erlaube Chrome anschließend den Zugriff auf die Kamera."
-  );
-}
-
-function openResult() {
-  const name = byId("dogName").value.trim();
-
-  byId("resultDogName").textContent = name
-    ? name.toUpperCase()
-    : "DEIN HUND";
-
-  stopCamera();
-  showScreen("screenResult");
-}
-
-function openHelp() {
-  byId("helpModal").classList.remove("is-hidden");
-}
-
-function closeHelp() {
-  byId("helpModal").classList.add("is-hidden");
-}
-
-function bindEvents() {
-  byId("startTestButton").addEventListener("click", () => {
-    showScreen("screenProfile");
-  });
-
-  byId("profileBackButton").addEventListener("click", () => {
-    showScreen("screenWelcome");
-  });
-
-  byId("profileContinue").addEventListener("click", () => {
-    const dogName = byId("dogName").value.trim();
-
-    if (!dogName) {
-      window.alert("Bitte gib zuerst den Namen deines Hundes ein.");
-      byId("dogName").focus();
-      return;
-    }
-
-    setupIndex = 0;
-    renderSetup();
-    showScreen("screenSetup");
-  });
-
-  byId("setupBackButton").addEventListener("click", () => {
-    showScreen("screenProfile");
-  });
-
-  byId("setupContinue").addEventListener("click", () => {
-    if (setupIndex < setupSteps.length - 1) {
-      setupIndex += 1;
-      renderSetup();
-      return;
-    }
-
-    resetRecordingScreen();
-    showScreen("screenRecord");
-  });
-
-  byId("recordBackButton").addEventListener("click", () => {
-    stopCamera();
-    showScreen("screenSetup");
-  });
-
-  byId("cameraRearButton").addEventListener("click", () => {
-    startCamera("environment");
-  });
-
-  byId("cameraFrontButton").addEventListener("click", () => {
-    startCamera("user");
-  });
-
-  byId("cameraStopButton").addEventListener("click", () => {
-    stopCamera();
-
-    byId("qualityText").textContent =
-      "Kamera gestoppt";
-
-    setCameraMessage(
-      "Kamera ist gestoppt. Du kannst sie jederzeit wieder aktivieren."
-    );
-  });
-
-  byId("recordButton").addEventListener("click", () => {
-    if (!cameraStream) {
-      startCamera("environment");
-      return;
-    }
-
-    byId("qualityText").textContent =
-      "Demo-Aufnahme bestätigt · bereit zur Auswertung";
-
-    setCameraMessage(
-      "Bild bestätigt. In der nächsten Version speichern wir echte Videoclips und synchronisieren die drei Handys."
-    );
-  });
-
-  byId("recordContinue").addEventListener("click", () => {
-    openResult();
-  });
-
-  byId("helpButton").addEventListener("click", () => {
-    openHelp();
-  });
-
-  byId("closeHelpButton").addEventListener("click", () => {
-    closeHelp();
-  });
-
-  byId("helpUnderstoodButton").addEventListener("click", () => {
-    closeHelp();
-  });
-
-  byId("helpModal").addEventListener("click", (event) => {
-    if (event.target === byId("helpModal")) {
-      closeHelp();
-    }
-  });
-
-  byId("retestButton").addEventListener("click", () => {
-    resetRecordingScreen();
-    byId("recordTitle").textContent =
-      "Nur den Trab erneut aufnehmen";
-
-    byId("recordDescription").textContent =
-      "Der Bauchgurt wurde angepasst. Öffne die Kamera und prüfe den Trab erneut.";
-
-    showScreen("screenRecord");
-  });
-
-  byId("newTestButton").addEventListener("click", () => {
-    stopCamera();
-
-    byId("dogName").value = "";
-    byId("harnessName").value = "";
-
-    showScreen("screenWelcome");
-  });
-
-  window.addEventListener("pagehide", stopCamera);
-}
-
-function init() {
-  renderSetup();
-  resetRecordingScreen();
-  updateClock();
-  bindEvents();
-
-  window.setInterval(updateClock, 1000);
-}
-
-document.addEventListener("DOMContentLoaded", init);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
+}());
