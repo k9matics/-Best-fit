@@ -11,7 +11,81 @@
 
   <title>HARNELYZER · BEST FIT</title>
 
-  <link rel="stylesheet" href="./style.css?v=1.0.1">
+  <link rel="stylesheet" href="./style.css?v=1.0.2">
+
+  <style>
+    .camera-live {
+      position: relative;
+      min-height: 220px;
+      overflow: hidden;
+      border: 1px solid #394438;
+      background: #050705;
+    }
+
+    .camera-live video {
+      display: block;
+      width: 100%;
+      min-height: 220px;
+      object-fit: cover;
+      background: #050705;
+    }
+
+    .camera-live .camera-cross {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .camera-live-status {
+      position: absolute;
+      z-index: 3;
+      right: 8px;
+      bottom: 8px;
+      padding: 6px 8px;
+      background: rgba(0, 0, 0, 0.78);
+      color: #a8bc69;
+      font-size: 10px;
+    }
+
+    .camera-live-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .camera-live-controls button {
+      min-height: 48px;
+      padding: 10px 8px;
+      font-size: 11px;
+    }
+
+    .camera-message {
+      min-height: 42px;
+      margin-top: 10px;
+      padding: 10px;
+      border-left: 3px solid #a8bc69;
+      background: rgba(168, 188, 105, 0.1);
+      color: #c6cbbb;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .camera-message.is-error {
+      border-left-color: #df5f5b;
+      background: rgba(223, 95, 91, 0.1);
+      color: #ffc4c0;
+    }
+
+    .camera-role {
+      margin: 0 0 10px;
+      color: #72dadd;
+      font-size: 12px;
+    }
+  </style>
 </head>
 
 <body>
@@ -54,10 +128,7 @@
 
         <div class="safety-note">
           <strong>✓</strong>
-
-          <span>
-            Passformhilfe für Geschirre. Keine tierärztliche Diagnose.
-          </span>
+          <span>Passformhilfe für Geschirre. Keine tierärztliche Diagnose.</span>
         </div>
 
         <button
@@ -109,17 +180,14 @@
         </div>
 
         <p class="eyebrow">SCHRITT 1 VON 4 · DEIN TEST</p>
-
         <h2>Wen prüfen wir?</h2>
 
         <p class="hint">
-          Für den Anfang reichen diese Angaben.
-          Du kannst sie später ändern.
+          Für den Anfang reichen diese Angaben. Du kannst sie später ändern.
         </p>
 
         <label class="field">
           <span>NAME DES HUNDES</span>
-
           <input
             id="dogName"
             type="text"
@@ -130,7 +198,6 @@
 
         <label class="field">
           <span>GESCHIRR / VARIANTE</span>
-
           <input
             id="harnessName"
             type="text"
@@ -141,7 +208,6 @@
 
         <label class="field">
           <span>WAS MÖCHTEST DU PRÜFEN?</span>
-
           <select id="testPurpose">
             <option value="alltag">Alltag & lockere Leine</option>
             <option value="zug">Leichter Zug / Training</option>
@@ -150,19 +216,11 @@
         </label>
 
         <div class="wizard-nav">
-          <button
-            id="profileBackButton"
-            class="button button-ghost"
-            type="button"
-          >
+          <button id="profileBackButton" class="button button-ghost" type="button">
             ← ZURÜCK
           </button>
 
-          <button
-            id="profileContinue"
-            class="button button-primary"
-            type="button"
-          >
+          <button id="profileContinue" class="button button-primary" type="button">
             WEITER →
           </button>
         </div>
@@ -194,48 +252,23 @@
           <div class="setup-map">
             <div class="runway"></div>
             <div class="dog-icon">🐕</div>
-
-            <div id="phoneMarker" class="phone-marker">
-              A
-            </div>
-
-            <div id="cameraDirection" class="camera-direction">
-              SEITLICH
-            </div>
+            <div id="phoneMarker" class="phone-marker">A</div>
+            <div id="cameraDirection" class="camera-direction">SEITLICH</div>
           </div>
 
           <div class="checklist">
-            <p>
-              <strong>✓</strong>
-              Kamera steht fest, idealerweise auf einem Stativ
-            </p>
-
-            <p>
-              <strong>✓</strong>
-              Der ganze Hund passt ins Bild: Kopf bis Pfoten
-            </p>
-
-            <p>
-              <strong>✓</strong>
-              Die Teststrecke ist eben und gut beleuchtet
-            </p>
+            <p><strong>✓</strong> Kamera steht fest, idealerweise auf einem Stativ</p>
+            <p><strong>✓</strong> Der ganze Hund passt ins Bild: Kopf bis Pfoten</p>
+            <p><strong>✓</strong> Die Teststrecke ist eben und gut beleuchtet</p>
           </div>
         </div>
 
         <div class="wizard-nav">
-          <button
-            id="setupBackButton"
-            class="button button-ghost"
-            type="button"
-          >
+          <button id="setupBackButton" class="button button-ghost" type="button">
             ← ZURÜCK
           </button>
 
-          <button
-            id="setupContinue"
-            class="button button-primary"
-            type="button"
-          >
+          <button id="setupContinue" class="button button-primary" type="button">
             POSITION STIMMT →
           </button>
         </div>
@@ -254,70 +287,68 @@
           <span>4</span>
         </div>
 
-        <p class="eyebrow">SCHRITT 3 VON 4 · AUFNAHME</p>
+        <p class="eyebrow">SCHRITT 3 VON 4 · KAMERA & AUFNAHME</p>
 
-        <h2 id="recordTitle">Erst ein kurzes Startsignal</h2>
+        <h2 id="recordTitle">Kamera dieses Handys aktivieren</h2>
 
         <p id="recordDescription" class="hint">
-          Starte alle drei Handys. Stelle dich kurz vor den Hund
-          und klatsche einmal sichtbar.
+          Dieses Handy übernimmt eine Kameraansicht. Öffne die Kamera,
+          prüfe den Bildausschnitt und starte erst dann die Aufnahme.
         </p>
 
         <div class="quality-bar">
-          <strong>QUALITÄTSCHECK</strong>
-          <span id="qualityText">Bereit für die Aufnahme</span>
+          <strong>STATUS</strong>
+          <span id="qualityText">Kamera noch nicht aktiviert</span>
         </div>
 
-        <section class="camera-grid">
-          <article class="camera-card">
-            <header>
-              <strong>CAM A · SEITE</strong>
-              <small>PFLICHTKAMERA</small>
-            </header>
+        <div class="camera-live">
+          <video
+            id="cameraPreview"
+            autoplay
+            muted
+            playsinline
+          ></video>
 
-            <div class="camera-view">
-              <span class="camera-cross"></span>
-              <em id="cameraAStatus">WARTET</em>
-            </div>
+          <span class="camera-cross"></span>
 
-            <p>Hauptansicht für Laufbild und Schulterfreiheit</p>
-          </article>
+          <span id="cameraLiveStatus" class="camera-live-status">
+            KAMERA AUS
+          </span>
+        </div>
 
-          <article class="camera-card">
-            <header>
-              <strong>CAM B · VORNE</strong>
-              <small>SYMMETRIE</small>
-            </header>
+        <p id="cameraMessage" class="camera-message">
+          Tippe auf „KAMERA AKTIVIEREN“. Erlaube Chrome anschließend
+          den Zugriff auf die Kamera.
+        </p>
 
-            <div class="camera-view">
-              <span class="camera-cross"></span>
-              <em id="cameraBStatus">WARTET</em>
-            </div>
-
-            <p>Brust, Vorderhand und Spurtreue</p>
-          </article>
-
-          <article class="camera-card">
-            <header>
-              <strong>CAM C · HINTEN</strong>
-              <small>HINTERHAND</small>
-            </header>
-
-            <div class="camera-view">
-              <span class="camera-cross"></span>
-              <em id="cameraCStatus">WARTET</em>
-            </div>
-
-            <p>Becken, Hinterhand und Seitversatz</p>
-          </article>
-        </section>
-
-        <div class="record-actions">
+        <div class="camera-live-controls">
           <button
-            id="helpButton"
+            id="cameraRearButton"
+            class="button button-primary"
+            type="button"
+          >
+            RÜCKKAMERA
+          </button>
+
+          <button
+            id="cameraFrontButton"
+            class="button"
+            type="button"
+          >
+            FRONTKAMERA
+          </button>
+
+          <button
+            id="cameraStopButton"
             class="button button-ghost"
             type="button"
           >
+            STOPP
+          </button>
+        </div>
+
+        <div class="record-actions">
+          <button id="helpButton" class="button button-ghost" type="button">
             ? ICH WEISS NICHT WEITER
           </button>
 
@@ -326,16 +357,12 @@
             class="button button-primary button-large"
             type="button"
           >
-            ● STARTSIGNAL BESTÄTIGEN
+            KAMERA AKTIVIEREN
           </button>
         </div>
 
         <div class="wizard-nav">
-          <button
-            id="recordBackButton"
-            class="button button-ghost"
-            type="button"
-          >
+          <button id="recordBackButton" class="button button-ghost" type="button">
             ← ZURÜCK
           </button>
 
@@ -344,7 +371,7 @@
             class="button button-primary is-hidden"
             type="button"
           >
-            AUFNAHME PRÜFEN →
+            DEMO-AUSWERTUNG ÖFFNEN →
           </button>
         </div>
       </article>
@@ -361,27 +388,21 @@
           </h2>
 
           <div class="data-confidence">
-            <strong>DATENQUALITÄT: <span>HOCH</span></strong>
-
-            <small>
-              3 Kameraansichten · 2 verwertbare Laufsequenzen · IMU aktiv
-            </small>
+            <strong>DATENQUALITÄT: <span>DEMO</span></strong>
+            <small>Diese Bewertung ist aktuell ein UI-Prototyp, keine echte Videoanalyse.</small>
           </div>
 
           <div class="dog-model-stage">
             <div class="dog-model">
               <div class="dog-body"></div>
               <div class="dog-head"></div>
-
               <div class="dog-leg leg-one"></div>
               <div class="dog-leg leg-two"></div>
               <div class="dog-leg leg-three"></div>
               <div class="dog-leg leg-four"></div>
-
               <div class="harness-part harness-neck"></div>
               <div class="harness-part harness-chest"></div>
               <div class="harness-part harness-belly"></div>
-
               <span class="hotspot hotspot-one">1</span>
               <span class="hotspot hotspot-two">2</span>
             </div>
@@ -400,32 +421,16 @@
             </div>
 
             <div class="metric-bars">
-              <p>
-                STABILITÄT <b>90</b>
-                <i><em style="width: 90%"></em></i>
-              </p>
-
-              <p>
-                BEWEGUNGSFREIHEIT <b>83</b>
-                <i><em style="width: 83%"></em></i>
-              </p>
-
-              <p>
-                LAUFBILD <b>87</b>
-                <i><em style="width: 87%"></em></i>
-              </p>
-
-              <p>
-                SYMMETRIE <b>84</b>
-                <i><em style="width: 84%"></em></i>
-              </p>
+              <p>STABILITÄT <b>90</b><i><em style="width: 90%"></em></i></p>
+              <p>BEWEGUNGSFREIHEIT <b>83</b><i><em style="width: 83%"></em></i></p>
+              <p>LAUFBILD <b>87</b><i><em style="width: 87%"></em></i></p>
+              <p>SYMMETRIE <b>84</b><i><em style="width: 84%"></em></i></p>
             </div>
           </div>
         </article>
 
         <aside class="panel result-actions">
           <p class="eyebrow">JETZT AM GESCHIRR</p>
-
           <h3>2 kleine Anpassungen</h3>
 
           <article class="result-tip tip-good">
@@ -435,35 +440,14 @@
 
           <article class="result-tip tip-warn">
             <strong>! 2 · BAUCHGURT</strong>
+            <p>Etwa 8 mm weiter nach hinten stellen und den Trab anschließend erneut prüfen.</p>
 
-            <p>
-              Etwa 8 mm weiter nach hinten stellen und den Trab
-              anschließend erneut prüfen.
-            </p>
-
-            <button
-              id="retestButton"
-              class="button button-warn"
-              type="button"
-            >
+            <button id="retestButton" class="button button-warn" type="button">
               NUR TRAB ERNEUT TESTEN →
             </button>
           </article>
 
-          <article class="result-tip">
-            <strong>↗ NÄCHSTER SCHRITT</strong>
-
-            <p>
-              Später kannst du diese Einstellung direkt
-              mit Geschirr B vergleichen.
-            </p>
-          </article>
-
-          <button
-            id="newTestButton"
-            class="button button-primary"
-            type="button"
-          >
+          <button id="newTestButton" class="button button-primary" type="button">
             NEUEN TEST STARTEN
           </button>
         </aside>
@@ -483,27 +467,21 @@
         ×
       </button>
 
-      <p class="eyebrow">HILFE ZUM AKTUELLEN SCHRITT</p>
-
+      <p class="eyebrow">HILFE</p>
       <h2>Kein Problem.</h2>
 
       <p>
-        Prüfe nur diese drei Dinge: Die Handys stehen fest,
-        der ganze Hund ist sichtbar und er kann geradeaus laufen.
-        Wenn das passt, bestätigst du das Startsignal und machst
-        zwei kurze Läufe.
+        Tippe auf „KAMERA AKTIVIEREN“ und erlaube Chrome den Kamerazugriff.
+        Stelle das Handy danach fest auf und prüfe, ob der ganze Hund
+        von Kopf bis Pfoten zu sehen ist.
       </p>
 
-      <button
-        id="helpUnderstoodButton"
-        class="button button-primary"
-        type="button"
-      >
+      <button id="helpUnderstoodButton" class="button button-primary" type="button">
         VERSTANDEN
       </button>
     </div>
   </div>
 
-  <script src="./app.js?v=1.0.1"></script>
+  <script src="./app.js?v=1.0.2"></script>
 </body>
 </html>
