@@ -9,7 +9,6 @@
   --olive-dark: #34451d;
   --cyan: #00dfc1;
   --cyan-bright: #6affeb;
-  --cyan-soft: rgba(0, 223, 193, 0.12);
   --yellow: #f0cd4b;
   --red: #e65370;
   --text: #eef4e9;
@@ -141,17 +140,18 @@ summary:focus-visible {
   height: 2.15rem;
   flex: 0 0 auto;
   place-items: center;
-  color: var(--olive-bright);
+  overflow: hidden;
   border: 1px solid rgba(184, 216, 120, 0.34);
   border-radius: 0.33rem;
-  background: linear-gradient(135deg, rgba(129, 154, 77, 0.29), rgba(7, 12, 8, 0.2));
+  background: transparent;
   box-shadow: 0 0 1rem rgba(184, 216, 120, 0.12);
 }
 
-.brand-mark svg {
-  width: 1.45rem;
-  height: 1.45rem;
-  fill: currentColor;
+.brand-logo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-copy {
@@ -1728,4 +1728,4 @@ h2 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
+    }
