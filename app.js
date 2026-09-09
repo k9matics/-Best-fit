@@ -7,19 +7,49 @@ const state = {
   role: "A",
   dogName: "",
   harnessName: "",
+  selectedFrameRate: 60,
   cameraStream: null,
   mediaRecorder: null,
   recordedChunks: [],
   recordedVideoUrl: null,
-  cameraRecording: false,
-  selectedFrameRate: 60
+  cameraRecording: false
 };
+
+function addClick(id, handler) {
+  const element = byId(id);
+
+  if (element) {
+    element.addEventListener("click", handler);
+  }
+}
+
+function safeStorageGet(key) {
+  try {
+    return window.localStorage.getItem(key);
+  } catch (error) {
+    return null;
+  }
+}
+
+function safeStorageSet(key, value) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch (error) {
+  }
+}
+
+function safeStorageRemove(key) {
+  try {
+    window.localStorage.removeItem(key);
+  } catch (error) {
+  }
+}
 
 function createTestId() {
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let id = "BF-";
 
-  for (let i = 0; i < 6; i += 1) {
+  for (let index = 0; index < 6; index += 1) {
     id += alphabet[Math.floor(Math.random() * alphabet.length)];
   }
 
@@ -72,7 +102,7 @@ function showScreen(screenId) {
 }
 
 function saveSession() {
-  localStorage.setItem(
+  safeStorageSet(
     "bestFitSession",
     JSON.stringify({
       testId: state.testId,
@@ -100,34 +130,66 @@ function updateSessionUi() {
   const cameraRoleLabel = byId("cameraRoleLabel");
   const cameraFrameRate = byId("cameraFrameRate");
 
-  if (sessionHeader) sessionHeader.textContent = sessionText;
-  if (inviteTestId) inviteTestId.textContent = state.testId || "BF-000000";
+  if (sessionHeader) {
+    sessionHeader.textContent = sessionText;
+  }
+
+  if (inviteTestId) {
+    inviteTestId.textContent = state.testId || "BF-000000";
+  }
+
   if (recordTestId) {
-    recordTestId.textContent = `${state.testId || "BF-000000"} · ${roleName(state.role)}`;
+    recordTestId.textContent =
+      `${state.testId || "BF-000000"} · ${roleName(state.role)}`;
   }
-  if (resultTestId) resultTestId.textContent = state.testId || "BF-000000";
+
+  if (resultTestId) {
+    resultTestId.textContent = state.testId || "BF-000000";
+  }
+
   if (resultDogName) {
-    resultDogName.textContent = state.dogName ? state.dogName.toUpperCase() : "DEIN HUND";
+    resultDogName.textContent = state.dogName
+      ? state.dogName.toUpperCase()
+      : "DEIN HUND";
   }
-  if (recordTitle) recordTitle.textContent = `${roleShortName(state.role)} bereit machen`;
-  if (openCameraButton) openCameraButton.textContent = `${roleShortName(state.role)} ÖFFNEN`;
-  if (cameraDialogTitle) cameraDialogTitle.textContent = roleShortName(state.role);
-  if (cameraRoleLabel) cameraRoleLabel.textContent = roleName(state.role);
-  if (cameraFrameRate) cameraFrameRate.value = String(state.selectedFrameRate);
+
+  if (recordTitle) {
+    recordTitle.textContent = `${roleShortName(state.role)} bereit machen`;
+  }
+
+  if (openCameraButton) {
+    openCameraButton.textContent = `${roleShortName(state.role)} ÖFFNEN`;
+  }
+
+  if (cameraDialogTitle) {
+    cameraDialogTitle.textContent = roleShortName(state.role);
+  }
+
+  if (cameraRoleLabel) {
+    cameraRoleLabel.textContent = roleName(state.role);
+  }
+
+  if (cameraFrameRate) {
+    cameraFrameRate.value = String(state.selectedFrameRate);
+  }
 }
 
 function getJoinUrl() {
   const url = new URL(window.location.href);
+
   url.search = "";
   url.searchParams.set("test", state.testId);
   url.searchParams.set("join", "1");
+
   return url.toString();
 }
 
 function renderQrCode() {
   const box = byId("qrCode");
 
-  if (!box) return;
+  if (!box) {
+    return;
+  }
 
   box.innerHTML = "";
 
@@ -163,10 +225,22 @@ function readJoinUrl() {
   const joinTitle = byId("joinTitle");
   const joinHint = byId("joinHint");
 
-  if (joinedTestId) joinedTestId.textContent = testId;
-  if (joinedSessionCard) joinedSessionCard.classList.remove("is-hidden");
-  if (manualJoinField) manualJoinField.classList.add("is-hidden");
-  if (joinTitle) joinTitle.textContent = "Diesem Test beitreten";
+  if (joinedTestId) {
+    joinedTestId.textContent = testId;
+  }
+
+  if (joinedSessionCard) {
+    joinedSessionCard.classList.remove("is-hidden");
+  }
+
+  if (manualJoinField) {
+    manualJoinField.classList.add("is-hidden");
+  }
+
+  if (joinTitle) {
+    joinTitle.textContent = "Diesem Test beitreten";
+  }
+
   if (joinHint) {
     joinHint.textContent =
       "Die Test-ID wurde aus dem QR-Code übernommen. Wähle jetzt die Rolle dieses Handys.";
@@ -218,9 +292,17 @@ function renderSetup() {
   const cameraDirection = byId("cameraDirection");
   const marker = byId("phoneMarker");
 
-  if (setupTitle) setupTitle.textContent = position.title;
-  if (setupDescription) setupDescription.textContent = position.text;
-  if (cameraDirection) cameraDirection.textContent = position.direction;
+  if (setupTitle) {
+    setupTitle.textContent = position.title;
+  }
+
+  if (setupDescription) {
+    setupDescription.textContent = position.text;
+  }
+
+  if (cameraDirection) {
+    cameraDirection.textContent = position.direction;
+  }
 
   if (marker) {
     marker.textContent = position.letter;
@@ -233,7 +315,7 @@ function renderSetup() {
 
 function setCameraStatus(message, type = "normal") {
   const status = byId("cameraStatus");
-  const light = byId("cameraRecordLight");
+  const recordLight = byId("cameraRecordLight");
 
   if (status) {
     status.textContent = message;
@@ -241,40 +323,47 @@ function setCameraStatus(message, type = "normal") {
     status.classList.toggle("is-recording", type === "recording");
   }
 
-  if (light) {
+  if (recordLight) {
     if (type === "recording") {
-      light.textContent = "REC ●";
+      recordLight.textContent = "REC ●";
     } else if (state.cameraStream) {
-      light.textContent = "BEREIT";
+      recordLight.textContent = "BEREIT";
     } else {
-      light.textContent = "KAMERA AUS";
+      recordLight.textContent = "KAMERA AUS";
     }
 
-    light.classList.toggle("is-recording", type === "recording");
+    recordLight.classList.toggle("is-recording", type === "recording");
   }
 }
 
 function setCameraActualSettings(message) {
-  const el = byId("cameraActualSettings");
-  if (el) el.textContent = message;
+  const settings = byId("cameraActualSettings");
+
+  if (settings) {
+    settings.textContent = message;
+  }
 }
 
 function setRecordStatus(message) {
-  const el = byId("recordStatus");
-  if (el) el.textContent = message;
+  const status = byId("recordStatus");
+
+  if (status) {
+    status.textContent = message;
+  }
 }
 
 function cameraSupported() {
   return Boolean(
+    window.isSecureContext &&
     navigator.mediaDevices &&
-    navigator.mediaDevices.getUserMedia &&
-    window.MediaRecorder
+    navigator.mediaDevices.getUserMedia
   );
 }
 
 function updateFrameRateSelection() {
-  const select = byId("cameraFrameRate");
-  state.selectedFrameRate = Number(select?.value) || 60;
+  const frameRate = byId("cameraFrameRate");
+
+  state.selectedFrameRate = Number(frameRate?.value) || 60;
 
   setCameraActualSettings(
     `Gewählt: ${state.selectedFrameRate} fps. Die echte Bildrate wird nach der Kamera-Freigabe angezeigt.`
@@ -296,7 +385,7 @@ function resetPlayback() {
 
   const preview = byId("cameraPreview");
   const playback = byId("cameraPlayback");
-  const discard = byId("btnCameraDiscard");
+  const discardButton = byId("btnCameraDiscard");
 
   if (playback) {
     playback.pause();
@@ -305,8 +394,13 @@ function resetPlayback() {
     playback.load();
   }
 
-  if (preview) preview.hidden = false;
-  if (discard) discard.disabled = true;
+  if (preview) {
+    preview.hidden = false;
+  }
+
+  if (discardButton) {
+    discardButton.disabled = true;
+  }
 }
 
 function stopCamera() {
@@ -315,7 +409,9 @@ function stopCamera() {
   }
 
   if (state.cameraStream) {
-    state.cameraStream.getTracks().forEach((track) => track.stop());
+    state.cameraStream.getTracks().forEach((track) => {
+      track.stop();
+    });
   }
 
   state.cameraStream = null;
@@ -323,55 +419,65 @@ function stopCamera() {
   state.cameraRecording = false;
 
   const preview = byId("cameraPreview");
-  const btnRecord = byId("btnCameraRecord");
-  const btnEnable = byId("btnCameraEnable");
+  const recordButton = byId("btnCameraRecord");
+  const enableButton = byId("btnCameraEnable");
 
-  if (preview) preview.srcObject = null;
-  if (btnRecord) {
-    btnRecord.disabled = true;
-    btnRecord.textContent = "AUFNAHME STARTEN";
+  if (preview) {
+    preview.srcObject = null;
   }
-  if (btnEnable) btnEnable.textContent = "KAMERA AKTIVIEREN";
+
+  if (recordButton) {
+    recordButton.disabled = true;
+    recordButton.textContent = "AUFNAHME STARTEN";
+  }
+
+  if (enableButton) {
+    enableButton.textContent = "KAMERA AKTIVIEREN";
+  }
 
   setCameraStatus("Kamera geschlossen.");
 }
 
 function openCameraDialog() {
   const dialog = byId("cameraDialog");
+  const enableButton = byId("btnCameraEnable");
 
   if (!dialog) {
-    alert("Der Kamera-Dialog fehlt im HTML.");
+    window.alert("Kamera-Dialog fehlt in index.html.");
     return;
   }
 
-  if (typeof dialog.showModal !== "function") {
-    setCameraStatus("Dieser Browser unterstützt den Kamera-Dialog nicht.", "error");
+  try {
+    if (!dialog.open) {
+      dialog.showModal();
+    }
+  } catch (error) {
+    window.alert("Der Kamera-Dialog konnte nicht geöffnet werden.");
     return;
-  }
-
-  if (!dialog.open) {
-    dialog.showModal();
   }
 
   resetPlayback();
   updateFrameRateSelection();
 
-  const btnEnable = byId("btnCameraEnable");
-
   if (!cameraSupported()) {
-    if (btnEnable) btnEnable.disabled = true;
+    if (enableButton) {
+      enableButton.disabled = true;
+    }
 
     setCameraStatus(
-      "Kameraaufnahme wird von diesem Browser nicht unterstützt.",
+      "Kamera nicht verfügbar: Öffne die Website in Chrome über HTTPS, nicht in einer eingebetteten Vorschau.",
       "error"
     );
+
     return;
   }
 
-  if (btnEnable) btnEnable.disabled = false;
+  if (enableButton) {
+    enableButton.disabled = false;
+  }
 
   setCameraStatus(
-    "Wähle die Bildrate und tippe dann auf „KAMERA AKTIVIEREN“."
+    "Wähle die Bildrate und tippe auf „KAMERA AKTIVIEREN“."
   );
 }
 
@@ -379,6 +485,7 @@ function closeCameraDialog() {
   stopCamera();
 
   const dialog = byId("cameraDialog");
+
   if (dialog && dialog.open) {
     dialog.close();
   }
@@ -387,9 +494,10 @@ function closeCameraDialog() {
 async function enableCamera() {
   if (!cameraSupported()) {
     setCameraStatus(
-      "Kameraaufnahme wird von diesem Browser nicht unterstützt.",
+      "Kamera nicht verfügbar: Bitte in Chrome über HTTPS öffnen.",
       "error"
     );
+
     return;
   }
 
@@ -405,18 +513,30 @@ async function enableCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
-        facingMode: { ideal: "environment" },
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
-        frameRate: { ideal: state.selectedFrameRate }
+        facingMode: {
+          ideal: "environment"
+        },
+        width: {
+          ideal: 1920
+        },
+        height: {
+          ideal: 1080
+        },
+        frameRate: {
+          ideal: state.selectedFrameRate
+        }
       }
     });
 
     state.cameraStream = stream;
 
     const preview = byId("cameraPreview");
+
     if (!preview) {
-      setCameraStatus("Video-Vorschau fehlt im HTML.", "error");
+      stream.getTracks().forEach((track) => track.stop());
+      state.cameraStream = null;
+
+      setCameraStatus("Video-Vorschau fehlt in index.html.", "error");
       return;
     }
 
@@ -428,7 +548,10 @@ async function enableCamera() {
     const track = stream.getVideoTracks()[0];
     const settings = track && track.getSettings ? track.getSettings() : {};
 
-    const realFps = settings.frameRate ? Math.round(settings.frameRate) : "unbekannt";
+    const realFps = settings.frameRate
+      ? Math.round(settings.frameRate)
+      : "unbekannt";
+
     const width = settings.width || "?";
     const height = settings.height || "?";
 
@@ -436,26 +559,46 @@ async function enableCamera() {
       `AKTIV: ${width} × ${height} · ${realFps} fps · angefordert: ${state.selectedFrameRate} fps`
     );
 
-    const btnEnable = byId("btnCameraEnable");
-    const btnRecord = byId("btnCameraRecord");
+    const enableButton = byId("btnCameraEnable");
+    const recordButton = byId("btnCameraRecord");
 
-    if (btnEnable) btnEnable.textContent = "KAMERA AKTIV";
-    if (btnRecord) btnRecord.disabled = false;
+    if (enableButton) {
+      enableButton.textContent = "KAMERA AKTIV";
+    }
+
+    if (recordButton) {
+      recordButton.disabled = !window.MediaRecorder;
+    }
 
     setCameraStatus(
-      "Kamera bereit. Prüfe den Bildausschnitt und starte dann die Aufnahme."
+      window.MediaRecorder
+        ? "Kamera bereit. Prüfe den Bildausschnitt und starte die Aufnahme."
+        : "Kamera bereit. Dieser Browser unterstützt jedoch keine lokale Videoaufnahme.",
+      window.MediaRecorder ? "normal" : "error"
     );
 
-    setRecordStatus(`Kamera aktiv: ${width} × ${height} bei ${realFps} fps.`);
+    setRecordStatus(
+      `Kamera aktiv: ${width} × ${height} bei ${realFps} fps.`
+    );
   } catch (error) {
-    const denied =
-      error &&
-      (error.name === "NotAllowedError" || error.name === "SecurityError");
+    const errorName = error?.name || "Unbekannter Fehler";
+
+    const messages = {
+      NotAllowedError:
+        "Kamera nicht freigegeben. Tippe auf das Schloss-Symbol neben der Adresse und erlaube Kamera.",
+      SecurityError:
+        "Kamera wird durch die aktuelle Umgebung blockiert. Öffne die GitHub-Pages-Adresse direkt in Chrome.",
+      NotFoundError:
+        "Keine Kamera gefunden.",
+      NotReadableError:
+        "Die Kamera wird gerade von einer anderen App verwendet. Schließe Kamera, WhatsApp oder Instagram und versuche es erneut.",
+      OverconstrainedError:
+        "Diese Kamera unterstützt die gewählte Einstellung nicht. Wähle 30 fps und versuche es erneut."
+    };
 
     setCameraStatus(
-      denied
-        ? "Kamera nicht freigegeben. Erlaube die Kamera in Chrome für diese Website."
-        : `Kamera konnte nicht gestartet werden: ${error?.name || "unbekannter Fehler"}. Wähle 60 oder 30 fps und versuche es erneut.`,
+      messages[errorName] ||
+        `Kamera konnte nicht gestartet werden: ${errorName}.`,
       "error"
     );
   }
@@ -472,12 +615,23 @@ function recorderMimeType() {
     "video/webm"
   ];
 
-  return formats.find((format) => MediaRecorder.isTypeSupported(format)) || "";
+  return formats.find((format) => {
+    return MediaRecorder.isTypeSupported(format);
+  }) || "";
 }
 
 function startRecording() {
   if (!state.cameraStream) {
     setCameraStatus("Bitte zuerst die Kamera aktivieren.", "error");
+    return;
+  }
+
+  if (!window.MediaRecorder) {
+    setCameraStatus(
+      "Lokale Videoaufnahme wird von diesem Browser nicht unterstützt.",
+      "error"
+    );
+
     return;
   }
 
@@ -499,40 +653,51 @@ function startRecording() {
 
     state.mediaRecorder.addEventListener("stop", () => {
       const recorder = state.mediaRecorder;
-      const videoType = recorder ? recorder.mimeType : "video/webm";
-
-      const blob = new Blob(state.recordedChunks, { type: videoType });
+      const videoType = recorder?.mimeType || "video/webm";
+      const blob = new Blob(state.recordedChunks, {
+        type: videoType
+      });
 
       state.cameraRecording = false;
 
-      const btnRecord = byId("btnCameraRecord");
-      if (btnRecord) btnRecord.textContent = "AUFNAHME STARTEN";
+      const recordButton = byId("btnCameraRecord");
 
-      if (blob.size > 0) {
-        state.recordedVideoUrl = URL.createObjectURL(blob);
-
-        const playback = byId("cameraPlayback");
-        const preview = byId("cameraPreview");
-        const discard = byId("btnCameraDiscard");
-
-        if (playback) {
-          playback.src = state.recordedVideoUrl;
-          playback.hidden = false;
-        }
-
-        if (preview) preview.hidden = true;
-        if (discard) discard.disabled = false;
-
-        setCameraStatus(
-          "Aufnahme beendet. Prüfe den Clip oder verwirf ihn für eine neue Aufnahme."
-        );
-
-        setRecordStatus(
-          `Clip lokal gespeichert: ${state.testId} · ${roleName(state.role)} · Wunschwert ${state.selectedFrameRate} fps.`
-        );
-      } else {
-        setCameraStatus("Es wurde kein Video erstellt.", "error");
+      if (recordButton) {
+        recordButton.textContent = "AUFNAHME STARTEN";
       }
+
+      if (blob.size <= 0) {
+        setCameraStatus("Es wurde kein Video erstellt.", "error");
+        state.mediaRecorder = null;
+        return;
+      }
+
+      state.recordedVideoUrl = URL.createObjectURL(blob);
+
+      const playback = byId("cameraPlayback");
+      const preview = byId("cameraPreview");
+      const discardButton = byId("btnCameraDiscard");
+
+      if (playback) {
+        playback.src = state.recordedVideoUrl;
+        playback.hidden = false;
+      }
+
+      if (preview) {
+        preview.hidden = true;
+      }
+
+      if (discardButton) {
+        discardButton.disabled = false;
+      }
+
+      setCameraStatus(
+        "Aufnahme beendet. Prüfe den Clip oder verwirf ihn für eine neue Aufnahme."
+      );
+
+      setRecordStatus(
+        `Clip lokal gespeichert: ${state.testId} · ${roleName(state.role)} · Wunschwert ${state.selectedFrameRate} fps.`
+      );
 
       state.mediaRecorder = null;
     });
@@ -540,23 +705,30 @@ function startRecording() {
     state.mediaRecorder.start(500);
     state.cameraRecording = true;
 
-    const btnRecord = byId("btnCameraRecord");
-    if (btnRecord) btnRecord.textContent = "AUFNAHME BEENDEN";
+    const recordButton = byId("btnCameraRecord");
+
+    if (recordButton) {
+      recordButton.textContent = "AUFNAHME BEENDEN";
+    }
 
     setCameraStatus(
-      "AUFZEICHNUNG LÄUFT · Klatschen sichtbar machen, dann zwei gerade Laufsequenzen filmen.",
+      "AUFZEICHNUNG LÄUFT · Erst sichtbar klatschen, dann zwei gerade Laufsequenzen filmen.",
       "recording"
     );
   } catch (error) {
-    setCameraStatus("Aufnahme konnte nicht gestartet werden.", "error");
+    setCameraStatus(
+      `Aufnahme konnte nicht gestartet werden: ${error?.name || "unbekannter Fehler"}.`,
+      "error"
+    );
   }
 }
 
 function toggleRecording() {
   if (state.cameraRecording) {
-    if (state.mediaRecorder && state.mediaRecorder.state === "recording") {
+    if (state.mediaRecorder?.state === "recording") {
       state.mediaRecorder.stop();
     }
+
     return;
   }
 
@@ -566,9 +738,10 @@ function toggleRecording() {
 function discardRecording() {
   resetPlayback();
 
-  if (state.cameraStream) {
-    const preview = byId("cameraPreview");
-    if (preview) preview.hidden = false;
+  const preview = byId("cameraPreview");
+
+  if (state.cameraStream && preview) {
+    preview.hidden = false;
   }
 
   setCameraStatus(
@@ -582,6 +755,7 @@ async function copyJoinLink() {
 
   try {
     await navigator.clipboard.writeText(joinUrl);
+
     if (copyStatus) {
       copyStatus.textContent =
         "Beitritts-Link kopiert. Sende ihn per WhatsApp an Handy B und C.";
@@ -618,20 +792,24 @@ function createMainTest() {
 
 function joinExistingTest() {
   const params = new URLSearchParams(window.location.search);
-  const fromUrl = (params.get("test") || "").trim().toUpperCase();
   const manualInput = byId("manualTestId");
-  const joinRole = byId("joinRole");
+  const roleInput = byId("joinRole");
+
+  const fromUrl = (params.get("test") || "").trim().toUpperCase();
   const manual = manualInput?.value.trim().toUpperCase() || "";
   const testId = fromUrl || manual;
 
   if (!/^BF-[A-Z0-9]{6}$/.test(testId)) {
-    window.alert("Bitte gib eine gültige Test-ID ein, zum Beispiel BF-7K2M9P.");
+    window.alert(
+      "Bitte gib eine gültige Test-ID ein, zum Beispiel BF-7K2M9P."
+    );
+
     manualInput?.focus();
     return;
   }
 
   state.testId = testId;
-  state.role = joinRole?.value || "B";
+  state.role = roleInput?.value || "B";
 
   saveSession();
   updateSessionUi();
@@ -654,30 +832,45 @@ function resetApp() {
   state.harnessName = "";
   state.selectedFrameRate = 60;
 
-  localStorage.removeItem("bestFitSession");
+  safeStorageRemove("bestFitSession");
 
-  const dogName = byId("dogName");
-  const harnessName = byId("harnessName");
-  const manualTestId = byId("manualTestId");
+  const dogNameInput = byId("dogName");
+  const harnessNameInput = byId("harnessName");
+  const manualTestIdInput = byId("manualTestId");
   const cameraFrameRate = byId("cameraFrameRate");
 
-  if (dogName) dogName.value = "";
-  if (harnessName) harnessName.value = "";
-  if (manualTestId) manualTestId.value = "";
-  if (cameraFrameRate) cameraFrameRate.value = "60";
+  if (dogNameInput) {
+    dogNameInput.value = "";
+  }
+
+  if (harnessNameInput) {
+    harnessNameInput.value = "";
+  }
+
+  if (manualTestIdInput) {
+    manualTestIdInput.value = "";
+  }
+
+  if (cameraFrameRate) {
+    cameraFrameRate.value = "60";
+  }
 
   updateSessionUi();
   showScreen("screenWelcome");
 
   const url = new URL(window.location.href);
+
   url.search = "";
+
   window.history.replaceState({}, "", url);
 }
 
 function restoreSession() {
-  const saved = localStorage.getItem("bestFitSession");
+  const saved = safeStorageGet("bestFitSession");
 
-  if (!saved) return;
+  if (!saved) {
+    return;
+  }
 
   try {
     const session = JSON.parse(saved);
@@ -691,13 +884,8 @@ function restoreSession() {
     updateSessionUi();
     renderSetup();
   } catch (error) {
-    localStorage.removeItem("bestFitSession");
+    safeStorageRemove("bestFitSession");
   }
-}
-
-function addClick(id, handler) {
-  const el = byId(id);
-  if (el) el.addEventListener("click", handler);
 }
 
 function bindEvents() {
@@ -743,7 +931,10 @@ function bindEvents() {
   });
 
   const frameRate = byId("cameraFrameRate");
-  if (frameRate) frameRate.addEventListener("change", updateFrameRateSelection);
+
+  if (frameRate) {
+    frameRate.addEventListener("change", updateFrameRateSelection);
+  }
 
   addClick("btnCameraEnable", enableCamera);
   addClick("btnCameraRecord", toggleRecording);
@@ -751,6 +942,7 @@ function bindEvents() {
   addClick("btnCameraClose", closeCameraDialog);
 
   const cameraDialog = byId("cameraDialog");
+
   if (cameraDialog) {
     cameraDialog.addEventListener("cancel", (event) => {
       event.preventDefault();
@@ -776,14 +968,15 @@ function init() {
   updateClock();
   window.setInterval(updateClock, 1000);
 
+  restoreSession();
   updateSessionUi();
   renderSetup();
   bindEvents();
-
-  if (readJoinUrl()) return;
-
-  restoreSession();
   updateFrameRateSelection();
+
+  if (readJoinUrl()) {
+    return;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", init);
