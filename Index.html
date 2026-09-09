@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+  <meta name="theme-color" content="#070908">
+  <meta
+    name="description"
+    content="HARNELYZER BEST FIT Mess-App für die geführte Bewegungsdokumentation von Hundegeschirren."
+  >
+  <title>HARNELYZER BEST FIT · Measure</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="./style.css?v=1.0.0">
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header class="app-header">
+    <a class="brand" href="../" aria-label="Zur Landing Page">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" role="img">
+          <path d="M32 5 54 17v30L32 59 10 47V17L32 5Zm0 6.2L15.4 20v24L32 53l16.6-9V20L32 11.2Z"></path>
+          <path d="M20 24h8v-7h8v7h8v8h-8v15h-8V32h-8v-8Z"></path>
+        </svg>
+      </span>
+
+      <span class="brand-copy">
+        <strong>HARNELYZER</strong>
+        <small>BEST FIT · MEASURE</small>
+      </span>
+    </a>
+
+    <div class="header-status">
+      <span class="status-dot"></span>
+      <span>BETA BIS 28.02.2027</span>
+    </div>
+  </header>
+
+  <main id="main" class="app-shell">
+    <section class="hero-panel card">
+      <div>
+        <p class="eyebrow">GEFÜHRTE MESSUNG</p>
+        <h1>BEWEGUNG SICHTBAR MACHEN.</h1>
+        <p class="hero-copy">
+          Diese Beta-App dokumentiert die sichtbare Bewegung eines
+          Hundegeschirrs beim natürlichen Laufen. Kein medizinischer Befund,
+          keine Diagnose und kein Druck auf den Hund.
+        </p>
+      </div>
+
+      <div class="hero-badges">
+        <span>1 GERÄT ODER 3 GERÄTE</span>
+        <span>3 PERSPEKTIVEN</span>
+        <span>KOSTENLOSER BETA-REPORT</span>
+      </div>
+    </section>
+
+    <section class="progress card" aria-label="Fortschritt">
+      <div class="progress-head">
+        <p class="eyebrow">ABLAUF</p>
+        <strong id="progressLabel">SCHRITT 1 VON 4</strong>
+      </div>
+
+      <div class="progress-bar" aria-hidden="true">
+        <span id="progressFill"></span>
+      </div>
+
+      <ol class="progress-steps">
+        <li class="is-active" data-step-indicator="1">HUND</li>
+        <li data-step-indicator="2">MODUS</li>
+        <li data-step-indicator="3">AUFNAHME</li>
+        <li data-step-indicator="4">REPORT</li>
+      </ol>
+    </section>
+
+    <section class="wizard">
+      <article class="step-card card is-active" data-step="1">
+        <div class="step-heading">
+          <p class="eyebrow">SCHRITT 1</p>
+          <h2>WEN PRÜFEN WIR?</h2>
+        </div>
+
+        <form id="dogForm" class="form-grid">
+          <label class="field">
+            <span>Hundename</span>
+            <input id="dogName" name="dogName" type="text" placeholder="z. B. Pino">
+          </label>
+
+          <label class="field">
+            <span>Geschirr / Modell</span>
+            <input id="harnessName" name="harnessName" type="text" placeholder="z. B. Y-Geschirr">
+          </label>
+
+          <label class="field">
+            <span>Größe des Hundes</span>
+            <select id="dogSize" name="dogSize">
+              <option value="">Bitte wählen</option>
+              <option value="klein">Klein</option>
+              <option value="mittel">Mittel</option>
+              <option value="gross">Groß</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Bemerkung</span>
+            <textarea
+              id="dogNote"
+              name="dogNote"
+              rows="4"
+              placeholder="Optional: Besonderheiten, Anpassung, Vergleichsgeschirr"
+            ></textarea>
+          </label>
+        </form>
+
+        <div class="info-box">
+          <strong>Wichtig</strong>
+          <p>
+            Nur kurze, natürliche Läufe auf gerader, ebener Strecke. Bitte
+            abbrechen, wenn dein Hund unwohl wirkt oder nicht ruhig laufen möchte.
+          </p>
+        </div>
+
+        <div class="actions">
+          <button class="button button-primary" type="button" data-next-step="2">
+            WEITER ZUM MESSMODUS
+          </button>
+        </div>
+      </article>
+
+      <article class="step-card card" data-step="2">
+        <div class="step-heading">
+          <p class="eyebrow">SCHRITT 2</p>
+          <h2>WIE MÖCHTEST DU MESSEN?</h2>
+        </div>
+
+        <div class="mode-grid">
+          <button class="mode-card is-selected" type="button" data-mode="solo">
+            <span class="mode-index">01</span>
+            <strong>1 GERÄT · 3 POSITIONEN</strong>
+            <small>
+              Ein Smartphone wird nacheinander auf A, B und C gestellt.
+            </small>
+          </button>
+
+          <button class="mode-card" type="button" data-mode="multi">
+            <span class="mode-index">02</span>
+            <strong>3 GERÄTE GLEICHZEITIG</strong>
+            <small>
+              Drei Smartphones filmen aus drei Perspektiven denselben Lauf.
+            </small>
+          </button>
+        </div>
+
+        <div class="setup-panel">
+          <div>
+            <p class="eyebrow">EMPFOHLEN FÜR DIE BETA</p>
+            <h3>HARNELYZER BASE SOLO</h3>
+            <p>
+              Für den Start genügt ein Smartphone mit Halter oder Stativ,
+              eine ruhige Strecke und drei klar markierte Positionen.
+            </p>
+          </div>
+
+          <ul class="check-list">
+            <li>Position A: Seite · 90 Grad</li>
+            <li>Position B: Vorne schräg · 45 Grad</li>
+            <li>Position C: Hinten schräg · 135 Grad</li>
+            <li>Gleiche Strecke, gleicher Untergrund, kurze Läufe</li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <button class="button button-ghost" type="button" data-prev-step="1">
+            ZURÜCK
+          </button>
+          <button class="button button-primary" type="button" data-next-step="3">
+            WEITER ZUR AUFNAHME
+          </button>
+        </div>
+      </article>
+
+      <article class="step-card card" data-step="3">
+        <div class="step-heading">
+          <p class="eyebrow">SCHRITT 3</p>
+          <h2>AUFNAHMEFÜHRUNG</h2>
+        </div>
+
+        <div class="capture-layout">
+          <aside class="capture-map card-soft">
+            <p class="mini-label">LAUFRICHTUNG →</p>
+            <div class="runway">
+              <span>START</span>
+              <strong>MESSBEREICH</strong>
+              <span>ZIEL</span>
+            </div>
+
+            <button class="position-chip is-current" type="button" data-position="A">
+              <b>A</b>
+              <small>SEITE · 90°</small>
+            </button>
+
+            <button class="position-chip" type="button" data-position="B">
+              <b>B</b>
+              <small>VORNE · 45°</small>
+            </button>
+
+            <button class="position-chip" type="button" data-position="C">
+              <b>C</b>
+              <small>HINTEN · 135°</small>
+            </button>
+          </aside>
+
+          <div class="capture-panel">
+            <div class="camera-guidance card-soft">
+              <p class="eyebrow">AKTUELLE POSITION</p>
+              <h3 id="positionTitle">POSITION A · SEITENANSICHT</h3>
+              <p id="positionHelp">
+                Stelle das Smartphone seitlich zur Laufstrecke auf Schulterhöhe
+                des Hundes. Der Hund sollte den Messbereich ruhig und gerade
+                durchlaufen.
+              </p>
+
+              <div class="guidance-points">
+                <span>Hund vollständig sichtbar</span>
+                <span>Möglichst wenig Verwacklung</span>
+                <span>Kein Zoom, keine extreme Nähe</span>
+              </div>
+            </div>
+
+            <div class="camera-actions">
+              <button id="openCameraButton" class="button button-primary" type="button">
+                KAMERA ÖFFNEN
+              </button>
+              <button id="markClipValidButton" class="button button-secondary" type="button">
+                CLIP ALS GÜLTIG MARKIEREN
+              </button>
+              <button id="nextPositionButton" class="button button-ghost" type="button">
+                NÄCHSTE POSITION
+              </button>
+            </div>
+
+            <div class="clip-grid">
+              <article class="clip-card is-pending" data-clip-card="A">
+                <div class="clip-head">
+                  <strong>A</strong>
+                  <span>PENDING</span>
+                </div>
+                <p>Seitenansicht · 90 Grad</p>
+              </article>
+
+              <article class="clip-card is-pending" data-clip-card="B">
+                <div class="clip-head">
+                  <strong>B</strong>
+                  <span>PENDING</span>
+                </div>
+                <p>Vorderansicht · 45 Grad</p>
+              </article>
+
+              <article class="clip-card is-pending" data-clip-card="C">
+                <div class="clip-head">
+                  <strong>C</strong>
+                  <span>PENDING</span>
+                </div>
+                <p>Heckansicht · 135 Grad</p>
+              </article>
+            </div>
+
+            <div class="quality-box">
+              <strong>QUALITÄTSPRINZIP</strong>
+              <p>
+                Lieber ein Lauf wird wiederholt, als dass ein unsicheres Ergebnis
+                angezeigt wird.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="button button-ghost" type="button" data-prev-step="2">
+            ZURÜCK
+          </button>
+          <button id="finishCaptureButton" class="button button-primary" type="button">
+            ZUM BETA-REPORT
+          </button>
+        </div>
+      </article>
+
+      <article class="step-card card" data-step="4">
+        <div class="step-heading">
+          <p class="eyebrow">SCHRITT 4</p>
+          <h2>DEIN BETA-REPORT</h2>
+        </div>
+
+        <div class="report-layout">
+          <section class="report-main card-soft">
+            <div class="report-head">
+              <div>
+                <p class="mini-label">BEST-FIT-REPORT</p>
+                <h3 id="reportDogName">DEIN HUND</h3>
+              </div>
+              <span class="report-badge">BETA</span>
+            </div>
+
+            <div class="score-block">
+              <span>BEST-FIT-SCORE</span>
+              <strong id="reportScore">78</strong>
+              <small>VON 100</small>
+            </div>
+
+            <div class="report-quality">
+              <span>DATENQUALITÄT</span>
+              <strong id="reportQuality">GUT · 86 %</strong>
+            </div>
+
+            <ul class="report-list">
+              <li>
+                <span class="good">✓</span>
+                <div>
+                  <strong>Rückenbereich</strong>
+                  <small>Stabil dokumentiert</small>
+                </div>
+              </li>
+              <li>
+                <span class="good">✓</span>
+                <div>
+                  <strong>Brustbereich</strong>
+                  <small>Überwiegend stabil</small>
+                </div>
+              </li>
+              <li>
+                <span class="watch">!</span>
+                <div>
+                  <strong>Seitlicher Shift</strong>
+                  <small>Beim Vergleich beobachten</small>
+                </div>
+              </li>
+              <li>
+                <span class="watch">!</span>
+                <div>
+                  <strong>Schulterbereich</strong>
+                  <small>Nachstellen und erneut prüfen</small>
+                </div>
+              </li>
+            </ul>
+
+            <div class="next-step-box">
+              <span>NÄCHSTER SCHRITT</span>
+              <p>
+                Geschirr nachstellen und bei Bedarf einen ruhigen Vergleichslauf
+                aufnehmen.
+              </p>
+            </div>
+          </section>
+
+          <aside class="report-side card-soft">
+            <p class="eyebrow">TRANSPARENZ</p>
+            <ul class="check-list">
+              <li>Kein medizinischer Befund</li>
+              <li>Kein Markenurteil</li>
+              <li>Nur für den dokumentierten Lauf</li>
+              <li>Beta-Report direkt nach der Messung</li>
+            </ul>
+
+            <div class="report-meta">
+              <div>
+                <span>MODUS</span>
+                <strong id="reportMode">1 GERÄT · 3 POSITIONEN</strong>
+              </div>
+              <div>
+                <span>GÜLTIGE CLIPS</span>
+                <strong id="reportClips">A · B · C</strong>
+              </div>
+            </div>
+
+            <div class="actions actions-stack">
+              <button id="restartButton" class="button button-secondary" type="button">
+                NEUE MESSUNG
+              </button>
+              <a
+                class="button button-ghost"
+                href="mailto:hello@harnelyzer.example?subject=HARNELYZER%20BEST%20FIT%20%E2%80%93%20Feedback"
+              >
+                FEEDBACK SENDEN
+              </a>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <dialog id="cameraDialog" class="camera-dialog">
+    <form method="dialog" class="camera-dialog-card">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">KAMERA</p>
+          <h2>KAMERA FÜR DIESE POSITION AKTIVIEREN</h2>
+        </div>
+        <button class="dialog-close" type="submit" aria-label="Dialog schließen">✕</button>
+      </div>
+
+      <p class="dialog-copy">
+        In dieser Beta bleibt das Video auf deinem Gerät. Die App soll dir nur
+        eine klare Aufnahmeführung geben.
+      </p>
+
+      <div class="preview-frame">
+        <video
+          id="cameraPreview"
+          playsinline
+          autoplay
+          muted
+        ></video>
+        <div class="preview-overlay">
+          <span id="previewOverlayLabel">POSITION A · SEITENANSICHT</span>
+        </div>
+      </div>
+
+      <div class="camera-meta">
+        <span id="cameraState">KAMERA NOCH NICHT AKTIVIERT</span>
+        <span id="cameraFrameRate">FPS: —</span>
+      </div>
+
+      <div class="actions">
+        <button id="btnCameraEnable" class="button button-primary" type="button">
+          KAMERA AKTIVIEREN
+        </button>
+        <button id="btnCameraStop" class="button button-secondary" type="button">
+          KAMERA STOPPEN
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./app.js?v=1.0.0"></script>
+</body>
+</html>
