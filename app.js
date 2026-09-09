@@ -13,23 +13,30 @@ const state = {
   dogName: "",
   harnessName: "",
   selectedFrameRate: 60,
+
   cameraStream: null,
   mediaRecorder: null,
   recordedChunks: [],
   recordedVideoUrl: null,
   cameraRecording: false,
+
   supabase: null,
   channel: null,
   realtimeConnected: false,
   readyPeers: { A: false, B: false, C: false },
   uploadPeers: { A: false, B: false, C: false },
+
   countdownTimer: null,
-  masterRunning: false
+  masterRunning: false,
+  joinedFromQr: false
 };
 
 function addClick(id, handler) {
   const element = byId(id);
-  if (element) element.addEventListener("click", handler);
+
+  if (element) {
+    element.addEventListener("click", handler);
+  }
 }
 
 function safeStorageGet(key) {
@@ -63,6 +70,10 @@ function createTestId() {
   }
 
   return id;
+}
+
+function isValidTestId(testId) {
+  return /^BF-[A-Z0-9]{6}$/.test(testId || "");
 }
 
 function roleName(role) {
@@ -148,9 +159,7 @@ function updateSessionUi() {
       `${state.testId || "BF-000000"} · ${roleName(state.role)}`;
   }
 
-  if (resultTestId) {
-    resultTestId.textContent = state.testId || "BF-000000";
-  }
+  if (resultTestId) resultTestId.textContent = state.testId || "BF-000000";
 
   if (resultDogName) {
     resultDogName.textContent = state.dogName
@@ -222,31 +231,58 @@ function renderQrCode() {
 function readJoinUrl() {
   const params = new URLSearchParams(window.location.search);
   const testId = (params.get("test") || "").trim().toUpperCase();
+  const join = params.get("join");
 
-  if (!/^BF-[A-Z0-9]{6}$/.test(testId)) {
+  if (join !== "1" || !isValidTestId(testId)) {
     return false;
   }
 
   state.testId = testId;
   state.role = "B";
+  state.joinedFromQr = true;
+  state.dogName = "";
+  state.harnessName = "";
+
+  saveSession();
+  updateSessionUi();
 
   const joinedTestId = byId("joinedTestId");
   const joinedSessionCard = byId("joinedSessionCard");
   const manualJoinField = byId("manualJoinField");
   const joinTitle = byId("joinTitle");
   const joinHint = byId("joinHint");
+  const roleInput = byId("joinRole");
+  const manualInput = byId("manualTestId");
 
-  if (joinedTestId) joinedTestId.textContent = testId;
-  if (joinedSessionCard) joinedSessionCard.classList.remove("is-hidden");
-  if (manualJoinField) manualJoinField.classList.add("is-hidden");
-  if (joinTitle) joinTitle.textContent = "Diesem Test beitreten";
+  if (joinedTestId) {
+    joinedTestId.textContent = testId;
+  }
+
+  if (joinedSessionCard) {
+    joinedSessionCard.classList.remove("is-hidden");
+  }
+
+  if (manualJoinField) {
+    manualJoinField.classList.add("is-hidden");
+  }
+
+  if (manualInput) {
+    manualInput.value = testId;
+  }
+
+  if (roleInput) {
+    roleInput.value = "B";
+  }
+
+  if (joinTitle) {
+    joinTitle.textContent = "Diesem Test beitreten";
+  }
 
   if (joinHint) {
     joinHint.textContent =
-      "Die Test-ID wurde aus dem QR-Code übernommen. Wähle jetzt die Rolle dieses Handys.";
+      "✓ Test-ID erkannt. Wähle Kamera B oder C und tippe auf TEST BEITRETEN.";
   }
 
-  updateSessionUi();
   showScreen("screenJoin");
 
   return true;
@@ -330,12 +366,18 @@ function setCameraStatus(message, type = "normal") {
 
 function setCameraActualSettings(message) {
   const settings = byId("cameraActualSettings");
-  if (settings) settings.textContent = message;
+
+  if (settings) {
+    settings.textContent = message;
+  }
 }
 
 function setRecordStatus(message) {
   const status = byId("recordStatus");
-  if (status) status.textContent = message;
+
+  if (status) {
+    status.textContent = message;
+  }
 }
 
 function cameraSupported() {
@@ -380,8 +422,13 @@ function resetPlayback() {
     playback.load();
   }
 
-  if (preview) preview.hidden = false;
-  if (discardButton) discardButton.disabled = true;
+  if (preview) {
+    preview.hidden = false;
+  }
+
+  if (discardButton) {
+    discardButton.disabled = true;
+  }
 }
 
 function stopCamera() {
@@ -401,7 +448,9 @@ function stopCamera() {
   const recordButton = byId("btnCameraRecord");
   const enableButton = byId("btnCameraEnable");
 
-  if (preview) preview.srcObject = null;
+  if (preview) {
+    preview.srcObject = null;
+  }
 
   if (recordButton) {
     recordButton.disabled = true;
@@ -425,7 +474,9 @@ function openCameraDialog() {
   }
 
   try {
-    if (!dialog.open) dialog.showModal();
+    if (!dialog.open) {
+      dialog.showModal();
+    }
   } catch (error) {
     window.alert("Der Kamera-Dialog konnte nicht geöffnet werden.");
     return;
@@ -435,7 +486,9 @@ function openCameraDialog() {
   updateFrameRateSelection();
 
   if (!cameraSupported()) {
-    if (enableButton) enableButton.disabled = true;
+    if (enableButton) {
+      enableButton.disabled = true;
+    }
 
     setCameraStatus(
       "Kamera nicht verfügbar: Öffne die Website in Chrome über HTTPS, nicht in einer eingebetteten Vorschau.",
@@ -445,7 +498,9 @@ function openCameraDialog() {
     return;
   }
 
-  if (enableButton) enableButton.disabled = false;
+  if (enableButton) {
+    enableButton.disabled = false;
+  }
 
   setCameraStatus(
     "Wähle die Bildrate und tippe auf „KAMERA AKTIVIEREN“."
@@ -456,7 +511,10 @@ function closeCameraDialog() {
   stopCamera();
 
   const dialog = byId("cameraDialog");
-  if (dialog && dialog.open) dialog.close();
+
+  if (dialog && dialog.open) {
+    dialog.close();
+  }
 }
 
 async function enableCamera() {
@@ -521,8 +579,13 @@ async function enableCamera() {
     const enableButton = byId("btnCameraEnable");
     const recordButton = byId("btnCameraRecord");
 
-    if (enableButton) enableButton.textContent = "KAMERA AKTIV";
-    if (recordButton) recordButton.disabled = !window.MediaRecorder;
+    if (enableButton) {
+      enableButton.textContent = "KAMERA AKTIV";
+    }
+
+    if (recordButton) {
+      recordButton.disabled = !window.MediaRecorder;
+    }
 
     setCameraStatus(
       window.MediaRecorder
@@ -559,7 +622,9 @@ async function enableCamera() {
 }
 
 function recorderMimeType() {
-  if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return "";
+  if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) {
+    return "";
+  }
 
   const formats = [
     "video/webm;codecs=vp9,opus",
@@ -567,11 +632,15 @@ function recorderMimeType() {
     "video/webm"
   ];
 
-  return formats.find((format) => MediaRecorder.isTypeSupported(format)) || "";
+  return formats.find((format) => {
+    return MediaRecorder.isTypeSupported(format);
+  }) || "";
 }
 
 function ensureSupabaseClient() {
-  if (state.supabase || !window.supabase?.createClient) return;
+  if (state.supabase || !window.supabase?.createClient) {
+    return;
+  }
 
   state.supabase = window.supabase.createClient(
     SUPABASE_URL,
@@ -602,7 +671,9 @@ async function uploadRecordedVideo(blob) {
       upsert: false
     });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data;
 }
@@ -673,7 +744,10 @@ function startRecording() {
       state.cameraRecording = false;
 
       const recordButton = byId("btnCameraRecord");
-      if (recordButton) recordButton.textContent = "AUFNAHME STARTEN";
+
+      if (recordButton) {
+        recordButton.textContent = "AUFNAHME STARTEN";
+      }
 
       if (blob.size <= 0) {
         setCameraStatus("Es wurde kein Video erstellt.", "error");
@@ -692,8 +766,13 @@ function startRecording() {
         playback.hidden = false;
       }
 
-      if (preview) preview.hidden = true;
-      if (discardButton) discardButton.disabled = false;
+      if (preview) {
+        preview.hidden = true;
+      }
+
+      if (discardButton) {
+        discardButton.disabled = false;
+      }
 
       setCameraStatus("Aufnahme beendet. Video wird jetzt hochgeladen.");
 
@@ -706,7 +785,10 @@ function startRecording() {
     state.cameraRecording = true;
 
     const recordButton = byId("btnCameraRecord");
-    if (recordButton) recordButton.textContent = "AUFNAHME BEENDEN";
+
+    if (recordButton) {
+      recordButton.textContent = "AUFNAHME BEENDEN";
+    }
 
     setCameraStatus(
       "AUFZEICHNUNG LÄUFT · Erst sichtbar klatschen, dann zwei gerade Laufsequenzen filmen.",
@@ -727,15 +809,21 @@ function stopRecordingIfActive() {
 }
 
 function toggleRecording() {
-  if (state.cameraRecording) stopRecordingIfActive();
-  else startRecording();
+  if (state.cameraRecording) {
+    stopRecordingIfActive();
+  } else {
+    startRecording();
+  }
 }
 
 function discardRecording() {
   resetPlayback();
 
   const preview = byId("cameraPreview");
-  if (state.cameraStream && preview) preview.hidden = false;
+
+  if (state.cameraStream && preview) {
+    preview.hidden = false;
+  }
 
   setCameraStatus(
     "Aufnahme verworfen. Kamera ist bereit für einen neuen Clip."
@@ -801,7 +889,9 @@ function runCountdown(startAt) {
 }
 
 async function broadcast(type, payload = {}) {
-  if (!state.channel || !state.realtimeConnected) return;
+  if (!state.channel || !state.realtimeConnected) {
+    return;
+  }
 
   await state.channel.send({
     type: "broadcast",
@@ -811,7 +901,9 @@ async function broadcast(type, payload = {}) {
 }
 
 function handleRealtimeEvent(event, payload) {
-  if (!payload || payload.testId !== state.testId) return;
+  if (!payload || payload.testId !== state.testId) {
+    return;
+  }
 
   if (event === "ready") {
     state.readyPeers[payload.role] = Boolean(payload.ready);
@@ -854,7 +946,9 @@ async function leaveRealtime() {
 }
 
 function connectRealtime() {
-  if (!state.testId) return;
+  if (!state.testId) {
+    return;
+  }
 
   ensureSupabaseClient();
 
@@ -999,6 +1093,7 @@ function createMainTest() {
   state.role = "A";
   state.dogName = dogName;
   state.harnessName = harnessNameInput?.value.trim() || "";
+  state.joinedFromQr = false;
 
   saveSession();
   updateSessionUi();
@@ -1015,18 +1110,20 @@ function joinExistingTest() {
 
   const fromUrl = (params.get("test") || "").trim().toUpperCase();
   const manual = manualInput?.value.trim().toUpperCase() || "";
-  const testId = fromUrl || manual;
+  const testId = state.joinedFromQr ? state.testId : (fromUrl || manual);
 
-  if (!/^BF-[A-Z0-9]{6}$/.test(testId)) {
+  if (!isValidTestId(testId)) {
     window.alert(
       "Bitte gib eine gültige Test-ID ein, zum Beispiel BF-7K2M9P."
     );
+
     manualInput?.focus();
     return;
   }
 
   state.testId = testId;
   state.role = roleInput?.value || "B";
+  state.joinedFromQr = false;
 
   saveSession();
   updateSessionUi();
@@ -1052,6 +1149,7 @@ function resetApp() {
   state.harnessName = "";
   state.selectedFrameRate = 60;
   state.masterRunning = false;
+  state.joinedFromQr = false;
   state.readyPeers = { A: false, B: false, C: false };
   state.uploadPeers = { A: false, B: false, C: false };
 
@@ -1070,14 +1168,16 @@ function resetApp() {
   updateSessionUi();
   showScreen("screenWelcome");
 
-  const url = new URL(window.location.href);
-  url.search = "";
+  const url = new URL(APP_URL);
   window.history.replaceState({}, "", url);
 }
 
 function restoreSession() {
   const saved = safeStorageGet("bestFitSession");
-  if (!saved) return;
+
+  if (!saved) {
+    return;
+  }
 
   try {
     const session = JSON.parse(saved);
@@ -1187,15 +1287,16 @@ function init() {
   updateClock();
   window.setInterval(updateClock, 1000);
 
-  restoreSession();
-  updateSessionUi();
-  renderSetup();
   bindEvents();
   updateFrameRateSelection();
 
   if (readJoinUrl()) {
     return;
   }
+
+  restoreSession();
+  updateSessionUi();
+  renderSetup();
 
   if (state.testId) {
     connectRealtime();
