@@ -2,6 +2,7 @@
 
 const byId = (id) => document.getElementById(id);
 
+const APP_URL = "https://k9matics.github.io/-Best-fit/";
 const SUPABASE_URL = "https://umosgsoigpnkvtzggnxa.supabase.co";
 const SUPABASE_KEY = "sb_publishable_qZPWqxhMw47gD2qcXauVyg_Xnax020d";
 const STORAGE_BUCKET = "bestfit-videos";
@@ -12,19 +13,16 @@ const state = {
   dogName: "",
   harnessName: "",
   selectedFrameRate: 60,
-
   cameraStream: null,
   mediaRecorder: null,
   recordedChunks: [],
   recordedVideoUrl: null,
   cameraRecording: false,
-
   supabase: null,
   channel: null,
   realtimeConnected: false,
   readyPeers: { A: false, B: false, C: false },
   uploadPeers: { A: false, B: false, C: false },
-
   countdownTimer: null,
   masterRunning: false
 };
@@ -89,7 +87,10 @@ function roleShortName(role) {
 
 function updateClock() {
   const clock = byId("liveTime");
-  if (clock) clock.textContent = new Date().toLocaleTimeString("de-DE");
+
+  if (clock) {
+    clock.textContent = new Date().toLocaleTimeString("de-DE");
+  }
 }
 
 function showScreen(screenId) {
@@ -98,9 +99,15 @@ function showScreen(screenId) {
   });
 
   const target = byId(screenId);
-  if (target) target.classList.add("is-active");
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (target) {
+    target.classList.add("is-active");
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 function saveSession() {
@@ -141,7 +148,9 @@ function updateSessionUi() {
       `${state.testId || "BF-000000"} · ${roleName(state.role)}`;
   }
 
-  if (resultTestId) resultTestId.textContent = state.testId || "BF-000000";
+  if (resultTestId) {
+    resultTestId.textContent = state.testId || "BF-000000";
+  }
 
   if (resultDogName) {
     resultDogName.textContent = state.dogName
@@ -157,9 +166,17 @@ function updateSessionUi() {
     openCameraButton.textContent = `${roleShortName(state.role)} ÖFFNEN`;
   }
 
-  if (cameraDialogTitle) cameraDialogTitle.textContent = roleShortName(state.role);
-  if (cameraRoleLabel) cameraRoleLabel.textContent = roleName(state.role);
-  if (cameraFrameRate) cameraFrameRate.value = String(state.selectedFrameRate);
+  if (cameraDialogTitle) {
+    cameraDialogTitle.textContent = roleShortName(state.role);
+  }
+
+  if (cameraRoleLabel) {
+    cameraRoleLabel.textContent = roleName(state.role);
+  }
+
+  if (cameraFrameRate) {
+    cameraFrameRate.value = String(state.selectedFrameRate);
+  }
 
   if (masterButton) {
     masterButton.style.display = state.role === "A" ? "" : "none";
@@ -170,9 +187,8 @@ function updateSessionUi() {
 }
 
 function getJoinUrl() {
-  const url = new URL(window.location.href);
+  const url = new URL(APP_URL);
 
-  url.search = "";
   url.searchParams.set("test", state.testId);
   url.searchParams.set("join", "1");
 
@@ -181,7 +197,10 @@ function getJoinUrl() {
 
 function renderQrCode() {
   const box = byId("qrCode");
-  if (!box) return;
+
+  if (!box) {
+    return;
+  }
 
   box.innerHTML = "";
 
@@ -204,7 +223,9 @@ function readJoinUrl() {
   const params = new URLSearchParams(window.location.search);
   const testId = (params.get("test") || "").trim().toUpperCase();
 
-  if (!/^BF-[A-Z0-9]{6}$/.test(testId)) return false;
+  if (!/^BF-[A-Z0-9]{6}$/.test(testId)) {
+    return false;
+  }
 
   state.testId = testId;
   state.role = "B";
@@ -295,9 +316,13 @@ function setCameraStatus(message, type = "normal") {
   }
 
   if (recordLight) {
-    if (type === "recording") recordLight.textContent = "REC ●";
-    else if (state.cameraStream) recordLight.textContent = "BEREIT";
-    else recordLight.textContent = "KAMERA AUS";
+    if (type === "recording") {
+      recordLight.textContent = "REC ●";
+    } else if (state.cameraStream) {
+      recordLight.textContent = "BEREIT";
+    } else {
+      recordLight.textContent = "KAMERA AUS";
+    }
 
     recordLight.classList.toggle("is-recording", type === "recording");
   }
@@ -383,7 +408,9 @@ function stopCamera() {
     recordButton.textContent = "AUFNAHME STARTEN";
   }
 
-  if (enableButton) enableButton.textContent = "KAMERA AKTIVIEREN";
+  if (enableButton) {
+    enableButton.textContent = "KAMERA AKTIVIEREN";
+  }
 
   setCameraStatus("Kamera geschlossen.");
 }
